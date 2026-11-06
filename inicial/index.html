@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffe600">
+  <meta name="description" content="Creá una propuesta comercial con tus condiciones y descargala en PDF. Versión inicial de acceso libre de Meli Propuestas, by Martin Yu.">
+  <title>Meli Propuestas · Versión inicial</title>
+  <link rel="stylesheet" href="./demo.css">
+  <script src="./pdf.js" defer></script>
+  <script src="./demo.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#generador">Ir al generador</a>
+  <header class="site-header">
+    <a class="brand" href="#inicio" aria-label="Meli Propuestas, inicio">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="13" fill="#ffe600"/><path d="M11 22.5l6-6a5 5 0 017 7l-3 3m8-9l-6 6a5 5 0 01-7-7l3-3" fill="none" stroke="#092f46" stroke-width="2.7" stroke-linecap="round"/></svg>
+      <span>Meli<br><strong>Propuestas</strong></span>
+    </a>
+    <nav aria-label="Navegación principal"><a href="#alcance">Qué podés hacer</a><a href="https://github.com/hightechbusiness/meli-propuestas-by-martin-yu" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a><a class="nav-cta extended-link" href="https://propuestas-que-conectan.pages.dev/solicitar-acceso/">Herramientas para equipos <span aria-hidden="true">↗</span></a></nav>
+  </header>
+
+  <main id="inicio">
+    <section class="hero" aria-labelledby="hero-title">
+      <div><p class="eyebrow"><span></span> UNA IDEA, MUCHAS POSIBILIDADES</p><h1 id="hero-title">Meli Propuestas.<br><span>Ideas que conectan.</span></h1><p class="hero-copy">Creá una propuesta con tus condiciones y descargala en PDF.<br class="desktop-break"> Acceso libre para empezar a comunicar mejor.</p></div>
+      <div class="edition-label"><span class="status-dot"></span> VERSIÓN INICIAL <small>Acceso libre · Tus condiciones, tu propuesta</small></div>
+    </section>
+
+    <section id="generador" class="workspace" aria-label="Crear tu propuesta">
+      <div class="editor panel">
+        <div class="panel-heading"><span class="step">01</span><div><h2>Dale tu toque</h2><p>Tu información, tus condiciones.</p></div><span class="local-pill">En tu navegador</span></div>
+        <form id="demoForm" novalidate>
+          <div class="field"><label for="business">Nombre del comercio</label><input id="business" name="business" maxlength="60" placeholder="Comercio o cliente" autocomplete="off" required><span id="businessError" class="field-error"></span></div>
+          <div class="field-pair"><div class="field"><label for="adviser">Nombre del asesor</label><input id="adviser" name="adviser" maxlength="48" placeholder="Tu nombre" autocomplete="off" required><span id="adviserError" class="field-error"></span></div><div class="field"><label for="contact">Contacto <span class="optional">opcional</span></label><input id="contact" name="contact" maxlength="80" placeholder="Email o teléfono" autocomplete="off"><span id="contactError" class="field-error"></span></div></div>
+          <div class="field rate-field"><label for="rate">Tasa a informar</label><div class="rate-input"><input id="rate" name="rate" placeholder="Ej. 2,50" inputmode="decimal" maxlength="6" aria-describedby="rateHelp" required><span aria-hidden="true">%</span></div><small id="rateHelp">Cargá la tasa acordada y revisala antes de compartir. El valor se ingresa manualmente.</small><span id="rateError" class="field-error"></span></div>
+          <div class="field"><label for="taxScope">Qué incluye la tasa</label><select id="taxScope" name="taxScope" aria-describedby="taxScopeHelp" required><option value="">Elegí una opción</option><option value="base">No incluye IVA ni IIBB</option><option value="iva">Incluye IVA; no incluye IIBB</option><option value="total">Incluye IVA e IIBB</option></select><small id="taxScopeHelp">Describen la tasa que cargaste; no suman impuestos.</small><span id="taxScopeError" class="field-error"></span></div>
+          <div class="field"><label for="benefit">Condiciones de la propuesta</label><textarea id="benefit" name="benefit" rows="3" maxlength="110" placeholder="Medio de cobro, plazo de acreditación y vigencia." aria-describedby="benefitHelp" required></textarea><small id="benefitHelp">Indicá cómo se aplica la tasa y hasta cuándo se mantiene la propuesta.</small><span id="benefitError" class="field-error"></span></div>
+          <button id="downloadButton" class="primary-button" type="submit"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4l4 4 4-4M4 16v4h16v-4"/></svg><span>Crear mi propuesta PDF</span><span aria-hidden="true">↗</span></button>
+          <p id="formStatus" class="form-status" role="status" aria-live="polite"></p>
+          <p class="privacy-note"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 8V6a4 4 0 018 0v2M4 8h12v9H4z"/></svg>Los datos del formulario se quedan en tu navegador. Sólo contamos visitas y acciones de forma anónima.</p>
+        </form>
+      </div>
+
+      <div class="preview-area">
+        <div class="preview-heading"><span><span class="step">02</span> Así se ve tu propuesta</span><span class="live-label"><i></i> Vista previa</span></div>
+        <article id="proposalPreview" class="proposal" aria-label="Vista previa de tu propuesta">
+          <div class="proposal-header"><div class="proposal-brand"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 14l4-4a4 4 0 015.7 5.7L13 17.4M19 10l-4 4a4 4 0 01-5.7-5.7L11 6.6"/></svg><span>Meli<br><strong>Propuestas</strong></span></div><span class="proposal-type">PROPUESTA</span></div>
+          <div class="adviser-line"><strong id="previewAdviser">Tu nombre</strong><span id="previewContact"></span></div>
+          <div class="proposal-content"><p class="proposal-eyebrow">PENSADA PARA TU NEGOCIO</p><h2 id="previewBusiness">Tu comercio</h2><p id="previewBenefit" class="proposal-message">Completá las condiciones que querés presentar.</p>
+            <div class="rate-card"><div class="rate-card-top"><span>TASA PROPUESTA</span><span class="rate-spark" aria-hidden="true">✦</span></div><div id="previewRate" class="proposal-rate">—<span>%</span></div><p id="previewTaxScope" class="tax-scope-preview">Indicá qué incluye la tasa.</p><div class="rate-decoration" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+            <div class="proposal-bottom"><span class="small-check" aria-hidden="true">✓</span><span>Una buena conversación<br><strong>empieza con una propuesta clara.</strong></span></div>
+          </div>
+          <footer class="proposal-footer"><p>Condiciones informadas por el asesor.<br>Alcance y vigencia según el detalle de la propuesta.</p><span>Martin Yu</span></footer>
+        </article>
+        <p class="preview-caption">El PDF mantiene este diseño. Los datos se usan sólo para crear tu archivo.</p>
+      </div>
+    </section>
+
+    <section id="downloadSuccess" class="success-panel" aria-labelledby="successTitle" hidden>
+      <span class="success-icon" aria-hidden="true">✓</span><div><p class="eyebrow">TU PROPUESTA ESTÁ LISTA</p><h2 id="successTitle">Una buena idea, lista para compartir.</h2><p>Si trabajás con propuestas a diario, conocé las herramientas para equipos.</p></div><a class="secondary-button extended-link" href="https://propuestas-que-conectan.pages.dev/solicitar-acceso/">Conocer el espacio del equipo <span aria-hidden="true">↗</span></a>
+    </section>
+
+    <section id="alcance" class="capabilities" aria-labelledby="capabilitiesTitle"><div class="journey-heading"><p class="eyebrow">ELEGÍ CÓMO TRABAJAR</p><h2 id="capabilitiesTitle">Una propuesta útil desde el primer día.</h2><p>La versión inicial es de acceso libre. El espacio del equipo reúne funciones para el trabajo comercial diario.</p></div><div class="comparison-scroll" role="region" aria-label="Comparación de funciones" tabindex="0"><table class="comparison-table"><caption>Qué podés gestionar en cada espacio</caption><thead><tr><th scope="col">Herramienta</th><th scope="col">Versión inicial <span>Acceso libre</span></th><th scope="col">Espacio del equipo <span>Acceso verificado</span></th></tr></thead><tbody><tr><th scope="row">Comercio, asesor y condiciones</th><td><span class="available">Sí</span> · Los completás vos</td><td><span class="available">Sí</span> · Personalizables</td></tr><tr><th scope="row">Tasas de la propuesta</th><td>Carga manual</td><td>Maestro interno y ajustes propios</td></tr><tr><th scope="row">IVA e IIBB</th><td>Indicás qué incluye la tasa</td><td>Cálculo configurable</td></tr><tr><th scope="row">Archivos y diseño</th><td>PDF · Un diseño unificado</td><td>PNG y PDF · Más diseños</td></tr><tr><th scope="row">Idiomas</th><td>Español</td><td>Español o chino</td></tr><tr><th scope="row">QR, cuotas y comparaciones</th><td><span class="limited">Disponibles en el espacio del equipo</span></td><td>Opcionales en cada propuesta</td></tr><tr><th scope="row">Guardar propuestas en la app</th><td>Descargás tu PDF</td><td>Guardado local en el navegador</td></tr></tbody></table></div><p class="comparison-hint">En pantallas pequeñas, deslizá la tabla para ver ambos espacios.</p><p class="scope-note">Las tasas de esta página las cargás vos. La versión inicial no consulta ni publica las tablas internas del equipo. Los datos del formulario se usan en tu navegador para generar tu PDF.</p></section>
+
+    <section id="recorrido" class="journey" aria-labelledby="journeyTitle"><div class="journey-heading"><p class="eyebrow">DE LA IDEA AL EQUIPO</p><h2 id="journeyTitle">Cada paso, un poco más simple.</h2><p>El proyecto crece alrededor de una misma idea: ayudar a comunicar mejor.</p></div><ol><li><span class="journey-number">01</span><h3>Una propuesta clara</h3><p>Cargá tus condiciones, elegí qué incluye la tasa y compartí tu PDF.</p></li><li><span class="journey-number">02</span><h3>Más herramientas</h3><p>El espacio del equipo incorpora diseños, idiomas y opciones para distintas conversaciones comerciales.</p></li><li><span class="journey-number">03</span><h3>Una mejora en equipo</h3><p>Compartí una idea, contá qué necesitás o ayudá a mejorar la herramienta desde GitHub.</p></li></ol></section>
+    <section class="community-banner"><div><span class="community-star" aria-hidden="true">☆</span><div><h2>Las buenas ideas también se comparten.</h2><p>Contá qué mejorarías o dejá una estrella en el proyecto. Cada aporte ayuda.</p></div></div><a href="https://github.com/hightechbusiness/meli-propuestas-by-martin-yu" target="_blank" rel="noopener noreferrer">Ver el proyecto en GitHub <span aria-hidden="true">↗</span></a><small>Para dejar una estrella necesitás una cuenta de GitHub.</small></section>
+  </main>
+
+  <footer class="site-footer"><span>Meli Propuestas <b>·</b> by Martin Yu</span><a href="mailto:ext_maryu@mercadolibre.com?subject=Sugiero%20una%20mejora%20-%20Meli%20Propuestas">Sugerir una mejora</a><span id="localCount" hidden></span></footer>
+  <noscript><p class="noscript">Activá JavaScript para editar la propuesta y generar el PDF en tu navegador.</p></noscript>
+</body>
+</html>
