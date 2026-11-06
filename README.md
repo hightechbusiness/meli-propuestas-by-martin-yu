@@ -10,7 +10,7 @@ Pensada para acompañar el trabajo de los asesores: elegir qué mostrar, adaptar
 
 [Conocer la herramienta y solicitar acceso](https://propuestas-que-conectan.pages.dev/solicitar-acceso/)
 
-[**Probá la demo pública →**](https://propuestas-que-conectan.pages.dev/demo/)
+[**Probá Meli Propuestas →**](https://hightechbusiness.github.io/meli-propuestas-by-martin-yu/)
 
 Un diseño, edición simple y descarga PDF. Usa condiciones ilustrativas; no contiene tablas comerciales internas. La versión completa se solicita por separado.
 
