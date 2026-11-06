@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-labelledby="title desc">
+  <title id="title">Meli Propuestas · by Martin Yu</title>
+  <desc id="desc">Presentación ilustrada de una herramienta para crear, personalizar y compartir propuestas. Ejemplo conceptual, sin tasas ni datos de comercios.</desc>
+  <defs>
+    <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#062c43"/><stop offset="1" stop-color="#0d5268"/></linearGradient>
+    <linearGradient id="accent"><stop stop-color="#fff159"/><stop offset="1" stop-color="#ffe600"/></linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="170%" height="180%"><feDropShadow dx="0" dy="20" stdDeviation="22" flood-color="#001b2b" flood-opacity=".25"/></filter>
+  </defs>
+  <rect width="1280" height="640" rx="32" fill="url(#bg)"/>
+  <g fill="none" stroke="#7ed3df" opacity=".16">
+    <ellipse cx="1050" cy="105" rx="326" ry="210" transform="rotate(-24 1050 105)"/>
+    <ellipse cx="1050" cy="105" rx="265" ry="150" transform="rotate(-24 1050 105)"/>
+    <ellipse cx="1050" cy="105" rx="202" ry="91" transform="rotate(-24 1050 105)"/>
+  </g>
+  <circle cx="1126" cy="270" r="8" fill="#fff159" opacity=".9"/>
+  <circle cx="972" cy="37" r="5" fill="#7ed3df"/>
+  <g font-family="Arial, Helvetica, sans-serif">
+    <rect x="68" y="65" width="312" height="36" rx="18" fill="#143f54" stroke="#376174"/>
+    <circle cx="89" cy="83" r="4" fill="#fff159"/>
+    <text x="105" y="88" fill="#d7edf3" font-size="13" font-weight="700" letter-spacing="1.1">GESTIÓN COMERCIAL · MARTIN YU</text>
+    <text x="68" y="208" fill="#f6fbff" font-size="62" font-weight="800" letter-spacing="-2">Meli</text>
+    <text x="68" y="277" fill="#fff159" font-size="62" font-weight="800" letter-spacing="-2">Propuestas.</text>
+    <rect x="70" y="309" width="76" height="5" rx="2.5" fill="#4cc4dc"/>
+    <text x="70" y="359" fill="#c9e2ea" font-size="22">Una herramienta útil crece</text>
+    <text x="70" y="390" fill="#c9e2ea" font-size="22">con las ideas de quienes la usan.</text>
+    <g font-size="14" font-weight="700">
+      <rect x="70" y="435" width="112" height="36" rx="18" fill="#16465a"/><text x="89" y="458" fill="#e8f7fa">ES / 中文</text>
+      <rect x="192" y="435" width="112" height="36" rx="18" fill="#16465a"/><text x="218" y="458" fill="#e8f7fa">PNG + PDF</text>
+      <rect x="314" y="435" width="130" height="36" rx="18" fill="#16465a"/><text x="336" y="458" fill="#e8f7fa">Web y celular</text>
+    </g>
+    <text x="70" y="571" fill="#9dc6d4" font-size="15">Conocé el proyecto. Compartí una idea. Ayudá a mejorarlo.</text>
+    <g filter="url(#shadow)">
+      <rect x="670" y="127" width="530" height="366" rx="21" fill="#f4f9fc"/>
+      <path d="M691 127h488a21 21 0 0 1 21 21v38H670v-38a21 21 0 0 1 21-21" fill="url(#accent)"/>
+      <circle cx="694" cy="156" r="4" fill="#07324c" opacity=".4"/><circle cx="710" cy="156" r="4" fill="#07324c" opacity=".4"/><circle cx="726" cy="156" r="4" fill="#07324c" opacity=".4"/>
+      <text x="756" y="162" fill="#07324c" font-size="14" font-weight="700">Tu próxima propuesta</text>
+      <text x="704" y="229" fill="#07324c" font-size="22" font-weight="800">Crear. Personalizar. Compartir.</text>
+      <rect x="704" y="247" width="330" height="8" rx="4" fill="#dce9ef"/>
+      <g fill="#fff" stroke="#d9e7ed">
+        <rect x="704" y="277" width="214" height="101" rx="14"/>
+        <rect x="936" y="277" width="230" height="101" rx="14"/>
+      </g>
+      <text x="724" y="309" fill="#54758b" font-size="13" font-weight="700">CONDICIONES CLARAS</text>
+      <text x="724" y="350" fill="#07324c" font-size="24" font-weight="800">A tu medida</text>
+      <text x="956" y="309" fill="#54758b" font-size="13" font-weight="700">UN SOLO IDIOMA</text>
+      <text x="956" y="350" fill="#07324c" font-size="24" font-weight="800">Para tu cliente</text>
+      <rect x="704" y="401" width="462" height="55" rx="12" fill="#062f47"/>
+      <text x="729" y="435" fill="#fff159" font-size="17" font-weight="700">De una buena idea a una propuesta mejor</text>
+    </g>
+    <g filter="url(#shadow)">
+      <rect x="1066" y="386" width="142" height="197" rx="24" fill="#071f30"/>
+      <rect x="1075" y="396" width="124" height="177" rx="18" fill="#fff"/>
+      <rect x="1112" y="404" width="50" height="5" rx="2.5" fill="#cbdce5"/>
+      <rect x="1086" y="430" width="102" height="52" rx="10" fill="#fff159"/>
+      <text x="1100" y="451" fill="#07324c" font-size="12" font-weight="700">Lista para</text><text x="1100" y="469" fill="#07324c" font-size="12" font-weight="700">compartir</text>
+      <rect x="1087" y="498" width="84" height="6" rx="3" fill="#d5e4eb"/><rect x="1087" y="511" width="68" height="6" rx="3" fill="#d5e4eb"/>
+      <circle cx="1137" cy="546" r="12" fill="#e7f5f9"/><path d="m1132 546 4 4 7-8" fill="none" stroke="#0a899d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </g>
+</svg>
