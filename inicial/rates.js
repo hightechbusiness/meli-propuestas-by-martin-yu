@@ -3,20 +3,23 @@
   'use strict';
   const KEY='meli-propuestas-local-rates-v1',MAX_BYTES=32768;
   const CATEGORIES=Object.freeze(['c1','c2','c3','c4','c5','c6']);
-  const METHODS=Object.freeze({debit:'Débito',credit:'Crédito en un pago',prepaid:'Tarjeta prepaga'});
+  const METHODS=Object.freeze({debit:'Débito',prepaid:'Tarjeta prepaga',credit:'Crédito en un pago',qr:'QR'});
+  const LEGACY_METHODS=Object.freeze(['debit','credit','prepaid']);
   const SCOPES=Object.freeze({base:'No incluye IVA ni IIBB',iva:'Incluye IVA; no incluye IIBB',total:'Incluye IVA e IIBB'});
   const clean=value=>String(value??'').normalize('NFC').replace(/[\u0000-\u001f\u007f]/g,' ').replace(/\s+/g,' ').trim();
   const object=value=>value!==null&&typeof value==='object'&&!Array.isArray(value);
   const keys=(value,expected)=>object(value)&&Object.keys(value).sort().join(',')===[...expected].sort().join(',');
   function parseRate(value){const text=String(value??'').trim();if(!/^\d{1,3}(?:[.,]\d{1,2})?$/.test(text))return null;const number=Number(text.replace(',','.'));return number>=0&&number<=100?number:null;}
-  function blank(){return {version:1,provider:'mercado-pago',taxScope:'',categories:Object.fromEntries(CATEGORIES.map(category=>[category,Object.fromEntries(Object.keys(METHODS).map(method=>[method,{rate:null,term:''}]))]))};}
+  function blank(){return {version:2,provider:'mercado-pago',taxScope:'',categories:Object.fromEntries(CATEGORIES.map(category=>[category,Object.fromEntries(Object.keys(METHODS).map(method=>[method,{rate:null,term:''}]))]))};}
   function validate(input,{requireAny=true}={}){
-    if(!keys(input,['version','provider','taxScope','categories'])||input.version!==1||input.provider!=='mercado-pago'||!keys(input.categories,CATEGORIES))throw Error('El archivo no tiene el formato de la tabla de Mercado Pago.');
+    if(!keys(input,['version','provider','taxScope','categories'])||![1,2].includes(input.version)||input.provider!=='mercado-pago'||!keys(input.categories,CATEGORIES))throw Error('El archivo no tiene el formato de la tabla de Mercado Pago.');
     if(typeof input.taxScope!=='string'||input.taxScope!==''&&!Object.hasOwn(SCOPES,input.taxScope))throw Error('Revisá qué impuestos incluyen las tasas de la tabla.');
+    // Recover existing three-medium tables in memory; only an explicit save writes v2.
+    const methods=input.version===1?LEGACY_METHODS:Object.keys(METHODS);
     const result=blank();result.taxScope=input.taxScope;let count=0;
     for(const category of CATEGORIES){
-      if(!keys(input.categories[category],Object.keys(METHODS)))throw Error('La tabla debe contener las seis categorías y sus tres medios de cobro.');
-      for(const method of Object.keys(METHODS)){
+      if(!keys(input.categories[category],methods))throw Error('La tabla debe contener las seis categorías y sus medios de cobro.');
+      for(const method of methods){
         const cell=input.categories[category][method],label='Cat. '+category.slice(1)+' · '+METHODS[method];
         if(!keys(cell,['rate','term'])||typeof cell.term!=='string')throw Error('Revisá la condición de '+label+'.');
         const term=clean(cell.term);if(term.length>40)throw Error('El plazo de '+label+' admite hasta 40 caracteres.');
@@ -38,7 +41,7 @@
   function load(storage){
     let raw;try{raw=storage.getItem(KEY);}catch(_){return {table:blank(),status:'unavailable'};}
     if(raw===null)return {table:blank(),status:'empty'};
-    if(typeof raw!=='string'||raw.length>MAX_BYTES)return {table:blank(),status:'invalid'};
+    if(typeof raw!=='string'||raw.length>MAX_BYTES||new TextEncoder().encode(raw).byteLength>MAX_BYTES)return {table:blank(),status:'invalid'};
     try{return {table:validate(JSON.parse(raw)),status:'saved'};}catch(_){return {table:blank(),status:'invalid'};}
   }
   function serialize(input){return JSON.stringify(validate(input),null,2);}
