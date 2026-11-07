@@ -48,3 +48,5 @@ body>main,.site-footer{max-width:1184px}
 @media(max-width:780px){.project-lab{gap:30px;padding:35px 0}.project-lab h2{font-size:27px}.project-lab h2 em{font-size:31px}}
 @media(max-width:600px){.project-lab{grid-template-columns:1fr;gap:20px}.project-lab h2{font-size:28px}.project-lab h2 em{font-size:32px}.project-links>a{padding:16px}.project-links strong{font-size:11px}.project-links small{font-size:10px}.project-lab>div>p:last-child{font-size:11px}}
 @media(prefers-reduced-motion:reduce){.project-links>a{transition:none}.project-links>a:hover{transform:none}}
+
+@media(max-width:600px){.site-header nav>.portal-home{display:none}}
