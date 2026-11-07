@@ -4,85 +4,76 @@
 
 ![Meli Propuestas · by Martin Yu](assets/portada.svg)
 
-Creá una propuesta con tus condiciones y descargala en PDF. La **versión inicial es de acceso libre** y se puede usar desde el celular o la computadora.
+Prepará una propuesta de Mercado Pago desde el celular o la computadora. La **versión inicial es de acceso libre**, con condiciones de referencia para Cat. 1 a Cat. 5 y financiación PSJ a R5.
 
-[**Crear mi propuesta →**](https://hightechbusiness.github.io/meli-propuestas-by-martin-yu/) · [Conocer el espacio del equipo](https://hightechbusiness.github.io/meli-propuestas-by-martin-yu/equipo/)
+[**Crear mi propuesta →**](https://hightechbusiness.github.io/meli-propuestas-by-martin-yu/inicial/) · [Herramientas para el equipo](https://hightechbusiness.github.io/meli-propuestas-by-martin-yu/equipo/)
 
-## Una propuesta útil desde el primer día
+## Una propuesta lista en pocos pasos
 
-1. Completá el comercio, tu nombre y un contacto si querés compartirlo.
-2. Elegí la categoría —de Cat. 1 a Cat. 6— para cargar sus condiciones guardadas de débito, prepaga, crédito en un pago y QR.
-3. Usá las casillas para mostrar u ocultar cada medio. Podés personalizar sus tasas y plazos para esta propuesta sin modificar la tabla guardada.
-4. Indicá qué impuestos incluye la tasa y completá las condiciones y la vigencia. La selección de IVA e IIBB describe el valor cargado; **no suma impuestos**.
-5. Revisá la vista previa y creá tu PDF.
+1. Elegí la categoría, la provincia y la acreditación. Las tasas base se cargan automáticamente.
+2. Dejá visibles sólo los medios que necesitás: débito, prepaga, crédito y QR. QR permite elegir con qué paga el cliente y su plazo; no representa una tasa única para todos los cobros QR.
+3. Elegí el round y las cuotas. Podés ajustar el adicional de financiación o desactivar esa sección.
+4. Indicá la fecha de validez. Comercio, asesor, contacto y mensaje son opcionales.
+5. Revisá la vista previa y descargá el PDF, con el logo oficial de Mercado Pago y sólo las opciones que dejaste visibles.
 
-La primera vez, tu tabla está vacía. No hay tasas, plazos ni datos personales precargados. Los valores los completa o importa cada asesor; la versión inicial no consulta el maestro interno del equipo. La categoría sirve para organizar tus condiciones, no se asigna automáticamente por facturación ni aparece en el PDF.
+**Mostrar tasas con IVA 21%** está activado al comenzar. Los campos de edición contienen tasas base sin IVA. El PDF suma el IVA una sola vez: para cuotas toma procesamiento de crédito más el adicional de financiación. La versión inicial no calcula IIBB; percepciones y otros impuestos aplicables no están incluidos.
 
-La primera visita abre una bienvenida con los principios en un fondo animado, una guía breve y las opciones **Comenzar** y **Saltear**. Podés pausar el fondo y volver a verla desde **Inicio**; respeta la preferencia de movimiento reducido. La preferencia de haberla visto se guarda sólo en el navegador, sin enviar eventos.
+Las referencias son una copia incorporada a esta versión, no una consulta en vivo. Confirmá las condiciones aplicables y la vigencia antes de compartir una oferta. La categoría organiza condiciones comerciales y no se asigna automáticamente por facturación. Categoría y round no aparecen en el PDF del cliente.
 
-## Mis condiciones Mercado Pago
+**Cat. 6, R5+ y condiciones especiales** se gestionan en el [espacio del equipo](https://hightechbusiness.github.io/meli-propuestas-by-martin-yu/equipo/), con acceso verificado.
 
-Podés preparar una sola tabla propia de **Cat. 1 a Cat. 6**, con una tasa y un plazo para cada medio: débito, prepaga, crédito en un pago y QR.
+## Tu tabla, cuando la necesites
 
-1. Abrí **Mis condiciones Mercado Pago** y completá al menos una tasa con su plazo. Podés dejar vacías las condiciones que no usás.
-2. Indicá qué impuestos incluyen los valores de esa tabla y elegí **Guardar mi tabla**. Se conserva en este perfil de navegador para esta dirección web. Si compartís el perfil, también compartís la tabla guardada.
-3. Elegí una categoría: se cargan sus cuatro medios de cobro. Las condiciones que no hayas guardado quedan vacías. También podés cargar nuevamente esa categoría con **Aplicar tabla guardada**.
+La carga de una tabla propia es opcional. Podés usar las referencias directamente o elegir **Mi tabla guardada** para recuperar tus tasas, plazos y adicionales por round. Los ajustes de una propuesta no cambian esa tabla: para conservarlos en el maestro personal se requiere **Guardar mi tabla**.
 
-Activá o desactivá **Mostrar Débito**, **Mostrar Prepaga**, **Mostrar Crédito en un pago** y **Mostrar QR** para decidir qué recibe el cliente. La vista previa y el PDF incluyen sólo los medios visibles. QR permite informar su tasa y acreditación; no genera una imagen de código QR y empieza sin valores precargados.
+**Descargar mi tabla** e **Importar mi tabla** permiten guardar y recuperar un JSON. La tabla se conserva en este perfil de navegador para esta dirección web, sin clientes ni datos del asesor. Si compartís el perfil, compartís también el guardado. Otros proyectos bajo el mismo origen de GitHub Pages comparten ese ámbito; no es una cuenta personal ni una copia en la nube.
 
-Editar la tasa o el plazo de una propuesta no modifica tu tabla guardada. Para actualizar la tabla, editá sus celdas y elegí **Guardar mi tabla** expresamente.
+Los respaldos anteriores siguen siendo compatibles. Los valores declarados con IVA se recuperan en su equivalente base, sin sumarlo dos veces. Si el respaldo incluía impuestos adicionales que no se pueden separar, se conserva el original y se ofrece descargarlo para revisar; no se interpreta como una tasa sin impuestos. Las condiciones personales fuera del alcance público se conservan en el respaldo, sin precargarlas en esta versión.
 
-**Descargar mi tabla** crea una copia JSON con las categorías, tasas, plazos y alcance fiscal. **Importar mi tabla** permite recuperar una copia compatible. No incluye comercios, nombres de asesores ni contactos; compartila sólo con quien corresponda. Cada PDF presenta los medios visibles y sus condiciones de la categoría elegida. Los respaldos anteriores de tres medios siguen siendo compatibles: sus condiciones se conservan y QR queda vacío.
+## Bienvenida e Inicio
+
+La entrada muestra los principios en un fondo animado, con luces lentas y las opciones **Comenzar** y **Saltear**. Podés pausar los efectos o volver a verlos desde **Inicio**. Se respeta la preferencia de movimiento reducido y haber visto la bienvenida se recuerda sólo en el navegador.
 
 ## Qué podés gestionar
 
 | Herramienta | Versión inicial · acceso libre | Espacio del equipo · acceso verificado |
 | --- | --- | --- |
-| Comercio, asesor y condiciones | Los completás vos | Personalizables |
-| Condiciones Mercado Pago | Tabla local Cat. 1–6; débito, prepaga, crédito y tasa QR | Maestro interno y ajustes propios |
-| Carga de tasas y plazos | Manual o desde tu tabla; copia JSON importable | Condiciones del maestro y personalización |
-| IVA e IIBB | Indicás qué incluye la tasa cargada | Cálculo configurable |
-| Archivos y diseño | PDF con un diseño unificado | PNG y PDF con más diseños |
-| Idioma de la propuesta | Español | Español o chino |
-| Medios visibles | Casillas para mostrar u ocultar débito, prepaga, crédito y QR | Opcionales en cada propuesta |
-| Cuotas y comparaciones | Disponibles en el espacio del equipo | Opcionales en cada propuesta |
-| Guardado en la aplicación | Descargás tu PDF | Guardado local en el navegador |
+| Tasas de referencia | Cat. 1–5, provincia y acreditación | Maestro completo y condiciones especiales |
+| Financiación | PSJ–R5; 2, 3, 6, 9, 12 y 18 cuotas | Incluye opciones especiales |
+| Medios visibles | Débito, prepaga, crédito y QR seleccionable | Catálogo y opciones ampliadas |
+| Impuestos | IVA 21% configurable | IVA e IIBB configurables |
+| Oferta | Validez y datos opcionales del asesor/comercio | Personalización ampliada |
+| Archivo | PDF con un diseño unificado | PNG y PDF, más diseños |
+| Idiomas | Español | Español o chino |
+| Comparación con competencia | Espacio del equipo | Opcional en cada propuesta |
+| Reutilización | Tabla local e importación/exportación JSON | Propuestas y maestro local |
 
-Podés usar la versión inicial sin solicitar acceso. Para las herramientas del equipo, verificás un correo autorizado; las solicitudes externas se revisan por separado.
+## Tus datos
 
-## Tus datos y los datos públicos
+El formulario, las imágenes del PDF y los respaldos se procesan en tu navegador. No se envían nombres, contactos, clientes ni contenido de propuestas. Sólo se conserva expresamente la tabla personal y las preferencias locales de uso.
 
-El formulario y el PDF se procesan en tu navegador. La tabla de tasas se conserva localmente cuando elegís **Guardar mi tabla**. Los datos del comercio, del asesor y las condiciones particulares de una propuesta no se guardan en esa tabla; al volver a abrir la herramienta, se completan para cada propuesta.
+La versión inicial no envía eventos a un contador central. El uso privado del equipo se registra por separado: correo verificado, acción y fecha/hora, visibles sólo con las cuentas administradoras autorizadas. El alojamiento puede conservar sus registros técnicos habituales.
 
-La versión inicial no envía eventos a un contador central. Sólo el espacio privado del equipo registra uso: correo verificado, acción y fecha/hora, visibles con las cuentas administradoras autorizadas. No registra el contenido de las propuestas ni datos de clientes.
-
-Este repositorio es público: sus archivos se pueden leer y copiar. Contiene la presentación, la versión inicial independiente en `inicial/`, el portal informativo de acceso en `equipo/` y las plantillas para proponer mejoras. No contiene tablas comerciales internas, acuerdos negociados, propuestas de clientes ni el código privado del generador del equipo. Las tasas que cargás o importás permanecen en tu navegador, no se incorporan al código público ni se envían a un servidor del proyecto. El alojamiento puede conservar los registros técnicos propios de sus servicios.
-
-Al compartir una captura o abrir un *issue*, usá datos ficticios y ocultá contactos de clientes y condiciones comerciales internas. Para un caso que necesite detalles privados, elegí el correo.
+Este repositorio público contiene la presentación, la versión inicial, el portal de acceso y las plantillas para sugerencias. Las referencias publicadas se limitan al segmento aprobado de Cat. 1–5 y PSJ–R5. No contiene Cat. 6 precargada, R5+, planes especiales, competencia, el maestro completo ni los archivos internos del proyecto. Las tablas propias no se incorporan al repositorio.
 
 ## Cómo fue creciendo
 
 | Etapa | Mejora incorporada |
 | --- | --- |
-| Una propuesta propia | Perfil del asesor y condiciones personalizables. |
-| Una comunicación más clara | Diseño adaptable, español o chino y exportación PNG/PDF en el espacio del equipo. |
-| Trabajo en equipo | Acceso verificado, opciones para distintas propuestas y actividad privada para el responsable. |
-| Una puerta abierta | Una versión inicial con tabla propia de categorías, PDF y una comunidad para aportar ideas. |
+| Propuesta propia | Perfil del asesor, condiciones editables y datos opcionales del comercio. |
+| Comunicación más clara | Logo oficial, diseños adaptables, español o chino y PNG/PDF en el espacio del equipo. |
+| Trabajo en equipo | Acceso verificado y registro privado de actividad. |
+| Entrada de acceso libre | PDF, medios visibles, bienvenida y tablas personales reutilizables. |
+| Menos pasos para compartir | Referencias Cat. 1–5, financiación por round, IVA y validez. |
 
-Es un recorrido de las funciones incorporadas. La versión inicial usa el estilo actual; no reproduce versiones antiguas ni publica datos internos.
+Es un recorrido de las funciones incorporadas; no publica versiones antiguas ni sus archivos internos.
 
-## Ayudá a que la próxima versión sea mejor
+## Aportá una idea
 
-**Compartí una idea.** Abrí un *issue* con lo que querés resolver, en qué momento aparece la dificultad y cómo te gustaría que funcionara.
+Abrí un *issue* para sugerir una mejora o describir un problema. Indicá los pasos y el resultado esperado, usando datos ficticios y ocultando contactos y condiciones particulares de clientes. Para casos privados, elegí el correo.
 
-**Contanos qué falló.** Describí los pasos, qué pasó y qué esperabas. Tenés plantillas para sugerencias y problemas.
-
-**Dejá una estrella.** Si la herramienta te resulta útil, podés usar el botón **Star**. Necesitás una cuenta de GitHub; las estrellas no son un requisito para usarla ni solicitar acceso.
-
-## Contacto
+Si la herramienta te ayuda, podés dejar una **estrella** en GitHub. Necesitás una cuenta; no es un requisito para usarla ni solicitar acceso.
 
 [Sugerir una mejora por correo](mailto:ext_maryu@mercadolibre.com?subject=Sugiero%20una%20mejora%20-%20Meli%20Propuestas) · [Informar un problema](mailto:ext_maryu@mercadolibre.com?subject=Encontr%C3%A9%20un%20problema%20-%20Meli%20Propuestas)
-
-Las ideas de quienes la usan ayudan a decidir qué mejorar primero.
 
 <sub>Creado por Martin Yu.</sub>
