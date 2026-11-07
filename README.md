@@ -11,36 +11,41 @@ Creá una propuesta con tus condiciones y descargala en PDF. La **versión inici
 ## Una propuesta útil desde el primer día
 
 1. Completá el comercio, tu nombre y un contacto si querés compartirlo.
-2. Elegí la categoría —de Cat. 1 a Cat. 6— y el medio de cobro: débito, crédito en un pago o prepaga.
-3. Usá una condición de tu tabla local o ingresá la tasa y el plazo manualmente para esa propuesta.
+2. Elegí la categoría —de Cat. 1 a Cat. 6— para cargar sus condiciones guardadas de débito, prepaga, crédito en un pago y QR.
+3. Usá las casillas para mostrar u ocultar cada medio. Podés personalizar sus tasas y plazos para esta propuesta sin modificar la tabla guardada.
 4. Indicá qué impuestos incluye la tasa y completá las condiciones y la vigencia. La selección de IVA e IIBB describe el valor cargado; **no suma impuestos**.
 5. Revisá la vista previa y creá tu PDF.
 
 La primera vez, tu tabla está vacía. No hay tasas, plazos ni datos personales precargados. Los valores los completa o importa cada asesor; la versión inicial no consulta el maestro interno del equipo. La categoría sirve para organizar tus condiciones, no se asigna automáticamente por facturación ni aparece en el PDF.
 
+La primera visita abre una bienvenida con los principios en un fondo animado, una guía breve y las opciones **Comenzar** y **Saltear**. Podés pausar el fondo y volver a verla desde **Ver bienvenida**; respeta la preferencia de movimiento reducido. La preferencia de haberla visto se guarda sólo en el navegador, sin enviar eventos.
+
 ## Mis condiciones Mercado Pago
 
-Podés preparar una sola tabla propia de **Cat. 1 a Cat. 6**, con una tasa y un plazo para cada medio: débito, crédito en un pago y prepaga.
+Podés preparar una sola tabla propia de **Cat. 1 a Cat. 6**, con una tasa y un plazo para cada medio: débito, prepaga, crédito en un pago y QR.
 
 1. Abrí **Mis condiciones Mercado Pago** y completá al menos una tasa con su plazo. Podés dejar vacías las condiciones que no usás.
 2. Indicá qué impuestos incluyen los valores de esa tabla y elegí **Guardar mi tabla**. Se conserva en este perfil de navegador para esta dirección web. Si compartís el perfil, también compartís la tabla guardada.
-3. Elegí categoría y medio en la propuesta para trabajar con esa condición. También podés aplicar la selección con **Aplicar tabla guardada**.
+3. Elegí una categoría: se cargan sus cuatro medios de cobro. Las condiciones que no hayas guardado quedan vacías. También podés cargar nuevamente esa categoría con **Aplicar tabla guardada**.
+
+Activá o desactivá **Mostrar Débito**, **Mostrar Prepaga**, **Mostrar Crédito en un pago** y **Mostrar QR** para decidir qué recibe el cliente. La vista previa y el PDF incluyen sólo los medios visibles. QR permite informar su tasa y acreditación; no genera una imagen de código QR y empieza sin valores precargados.
 
 Editar la tasa o el plazo de una propuesta no modifica tu tabla guardada. Para actualizar la tabla, editá sus celdas y elegí **Guardar mi tabla** expresamente.
 
-**Descargar mi tabla** crea una copia JSON con las categorías, tasas, plazos y alcance fiscal. **Importar mi tabla** permite recuperar una copia compatible. No incluye comercios, nombres de asesores ni contactos; compartila sólo con quien corresponda. Cada PDF presenta un medio de cobro y una condición de la categoría elegida.
+**Descargar mi tabla** crea una copia JSON con las categorías, tasas, plazos y alcance fiscal. **Importar mi tabla** permite recuperar una copia compatible. No incluye comercios, nombres de asesores ni contactos; compartila sólo con quien corresponda. Cada PDF presenta los medios visibles y sus condiciones de la categoría elegida. Los respaldos anteriores de tres medios siguen siendo compatibles: sus condiciones se conservan y QR queda vacío.
 
 ## Qué podés gestionar
 
 | Herramienta | Versión inicial · acceso libre | Espacio del equipo · acceso verificado |
 | --- | --- | --- |
 | Comercio, asesor y condiciones | Los completás vos | Personalizables |
-| Condiciones Mercado Pago | Tabla local Cat. 1–6; débito, crédito en un pago y prepaga | Maestro interno y ajustes propios |
+| Condiciones Mercado Pago | Tabla local Cat. 1–6; débito, prepaga, crédito y tasa QR | Maestro interno y ajustes propios |
 | Carga de tasas y plazos | Manual o desde tu tabla; copia JSON importable | Condiciones del maestro y personalización |
 | IVA e IIBB | Indicás qué incluye la tasa cargada | Cálculo configurable |
 | Archivos y diseño | PDF con un diseño unificado | PNG y PDF con más diseños |
 | Idioma de la propuesta | Español | Español o chino |
-| QR, cuotas y comparaciones | Disponibles en el espacio del equipo | Opcionales en cada propuesta |
+| Medios visibles | Casillas para mostrar u ocultar débito, prepaga, crédito y QR | Opcionales en cada propuesta |
+| Cuotas y comparaciones | Disponibles en el espacio del equipo | Opcionales en cada propuesta |
 | Guardado en la aplicación | Descargás tu PDF | Guardado local en el navegador |
 
 Podés usar la versión inicial sin solicitar acceso. Para las herramientas del equipo, verificás un correo autorizado; las solicitudes externas se revisan por separado.
