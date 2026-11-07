@@ -18,7 +18,7 @@ Creá una propuesta con tus condiciones y descargala en PDF. La **versión inici
 
 La primera vez, tu tabla está vacía. No hay tasas, plazos ni datos personales precargados. Los valores los completa o importa cada asesor; la versión inicial no consulta el maestro interno del equipo. La categoría sirve para organizar tus condiciones, no se asigna automáticamente por facturación ni aparece en el PDF.
 
-La primera visita abre una bienvenida con los principios en un fondo animado, una guía breve y las opciones **Comenzar** y **Saltear**. Podés pausar el fondo y volver a verla desde **Ver bienvenida**; respeta la preferencia de movimiento reducido. La preferencia de haberla visto se guarda sólo en el navegador, sin enviar eventos.
+La primera visita abre una bienvenida con los principios en un fondo animado, una guía breve y las opciones **Comenzar** y **Saltear**. Podés pausar el fondo y volver a verla desde **Inicio**; respeta la preferencia de movimiento reducido. La preferencia de haberla visto se guarda sólo en el navegador, sin enviar eventos.
 
 ## Mis condiciones Mercado Pago
 
