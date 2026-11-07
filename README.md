@@ -13,12 +13,13 @@ Prepará una propuesta de Mercado Pago desde el celular o la computadora. La **v
 1. Elegí la categoría, la provincia y la acreditación. Las tasas base se cargan automáticamente.
 2. Dejá visibles sólo los medios que necesitás: débito, prepaga, crédito y QR. QR permite elegir con qué paga el cliente y su plazo; no representa una tasa única para todos los cobros QR.
 3. Elegí el round y las cuotas. Podés ajustar el adicional de financiación o desactivar esa sección.
-4. Indicá la fecha de validez. Comercio, asesor, contacto y mensaje son opcionales.
-5. Revisá la vista previa y descargá el PDF, con el logo oficial de Mercado Pago y sólo las opciones que dejaste visibles.
+4. Elegí el idioma de la propuesta: español o chino simplificado. El editor sigue en español; la vista previa y el PDF usan sólo el idioma elegido. Completá los textos y plazos propios en ese idioma.
+5. Indicá la fecha de validez. Comercio, asesor, contacto y mensaje son opcionales.
+6. Revisá la vista previa y descargá el PDF, con el logo oficial de Mercado Pago y sólo las opciones que dejaste visibles.
 
-**Mostrar tasas con IVA 21%** está activado al comenzar. Los campos de edición contienen tasas base sin IVA. El PDF suma el IVA una sola vez: para cuotas toma procesamiento de crédito más el adicional de financiación. La versión inicial no calcula IIBB; percepciones y otros impuestos aplicables no están incluidos.
+**Mostrar tasas con IVA 21%** está activado al comenzar. Los campos de edición contienen tasas base sin IVA. El PDF suma el IVA una sola vez: para cuotas toma procesamiento de crédito más el adicional de financiación. La versión inicial conserva sólo la opción de IVA, sin agregar una leyenda de percepciones u otros impuestos a la propuesta.
 
-Las referencias son una copia incorporada a esta versión, no una consulta en vivo. Confirmá las condiciones aplicables y la vigencia antes de compartir una oferta. La categoría organiza condiciones comerciales y no se asigna automáticamente por facturación. Categoría y round no aparecen en el PDF del cliente.
+Las referencias son una copia incorporada a esta versión, no una consulta en vivo. Confirmá las condiciones aplicables y la vigencia antes de compartir una oferta. La categoría organiza condiciones comerciales y no se asigna automáticamente por facturación. Categoría y round no aparecen en el PDF del cliente. En chino, débito se presenta como **现金卡**.
 
 **Cat. 6, R5+ y condiciones especiales** se gestionan en el [espacio del equipo](https://hightechbusiness.github.io/meli-propuestas-by-martin-yu/equipo/), con acceso verificado.
 
@@ -44,7 +45,7 @@ La entrada muestra los principios en un fondo animado, con luces lentas y las op
 | Impuestos | IVA 21% configurable | IVA e IIBB configurables |
 | Oferta | Validez y datos opcionales del asesor/comercio | Personalización ampliada |
 | Archivo | PDF con un diseño unificado | PNG y PDF, más diseños |
-| Idiomas | Español | Español o chino |
+| Idiomas | Español o chino; editor en español | Español o chino |
 | Comparación con competencia | Espacio del equipo | Opcional en cada propuesta |
 | Reutilización | Tabla local e importación/exportación JSON | Propuestas y maestro local |
 
