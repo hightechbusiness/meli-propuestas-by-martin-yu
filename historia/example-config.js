@@ -1,0 +1,1 @@
+window.AgreementExample=Object.freeze({"amount": 10000, "currentRate": 3.14, "proposalRate": 1.56, "sourceContext": "Débito inmediato · Buenos Aires · sin IVA. Valores ilustrativos para este recorrido; no constituyen una oferta vigente."});
