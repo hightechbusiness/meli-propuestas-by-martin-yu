@@ -3,12 +3,12 @@
   'use strict';
   const COUNT_KEY='propuestas-demo-pdf-count',LIMITS={business:60,adviser:48,contact:80,benefit:110,settlement:40};
   const TABLE=root.PublicRateTable,PRESETS=root.PublicRatePresets;
-  const $=id=>document.getElementById(id),FORM_FIELDS=['business','adviser','contact','sourceMode','category','province','release','qrCondition','round','validUntil','benefit'];
+  const $=id=>document.getElementById(id),FORM_FIELDS=['business','adviser','contact','sourceMode','category','province','release','qrCondition','round','validUntil','benefit','proposalLanguage'];
   const METHODS=Object.keys(TABLE.METHODS),ITEM_FIELDS=METHODS.flatMap(method=>['rate-'+method,'settlement-'+method]);
   const COUNTS=PRESETS.INSTALLMENTS,FIN_FIELDS=COUNTS.map(count=>'fin-rate-'+count),LEGACY_KEY=TABLE.KEY+'-legacy-backup-v2';
   const normalize=value=>String(value??'').normalize('NFC').replace(/[\u0000-\u001f\u007f]/g,' ').replace(/\s+/g,' ').trim();
   function parseRate(value){const text=String(value??'').trim();if(!/^\d{1,3}(?:[.,]\d{1,8})?$/.test(text))return null;const number=Number(text.replace(',','.'));return number>=0&&number<=100?number:null;}
-  const formatRate=value=>new Intl.NumberFormat('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2}).format(value);
+  const formatRate=(value,language='es')=>new Intl.NumberFormat(language==='zh-CN'?'zh-CN':'es-AR',{minimumFractionDigits:2,maximumFractionDigits:2}).format(value);
   const formatBase=value=>new Intl.NumberFormat('es-AR',{useGrouping:false,maximumFractionDigits:8}).format(value);
   const displayRate=(base,includeIVA)=>typeof base==='number'&&Number.isFinite(base)?base*(includeIVA?1.21:1):null;
   function todayISO(){
@@ -19,10 +19,26 @@
     if(typeof value!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(value))return false;
     const date=new Date(value+'T12:00:00Z');return Number.isFinite(date.getTime())&&date.toISOString().slice(0,10)===value;
   }
-  const validityLabel=value=>validDate(value)?'Válida hasta el '+new Intl.DateTimeFormat('es-AR',{timeZone:'UTC',day:'2-digit',month:'2-digit',year:'numeric'}).format(new Date(value+'T12:00:00Z')):'Completá la fecha de validez';
-  const taxLabel=includeIVA=>(includeIVA?'Tasas con IVA 21%.':'Tasas sin IVA.')+' Percepciones y otros impuestos no incluidos.';
+  const COPY=Object.freeze({
+    es:{type:'PROPUESTA',eyebrow:'PENSADA PARA TU NEGOCIO',business:'Propuesta comercial',datePrefix:'Válida hasta el ',dateMissing:'Completá la fecha de validez',settlement:'Acreditación: ',termMissing:'Plazo a completar',empty:'Elegí al menos un medio para mostrar sus condiciones.',financing:'Cobrá también en cuotas',financingPDF:'COBRÁ EN CUOTAS',cost:'Costo total de cobro',withIVA:' con IVA',total:'Costo total: procesamiento + financiación',taxWith:'Tasas con IVA 21%.',taxWithout:'Tasas sin IVA.',closing:'Una buena conversación',closingStrong:'empieza con una propuesta clara.',footer:'Condiciones informadas por el asesor.',scope:'Alcance y vigencia según el detalle de la propuesta.',methods:{debit:'Débito',prepaid:'Tarjeta prepaga',credit:'Crédito en un pago',qr:'QR'},qr:{money:'Dinero en cuenta',debit:'Tarjeta de débito',credit:'Tarjeta de crédito',consumer:'Crédito de Mercado Pago'}},
+    'zh-CN':{type:'收款方案',eyebrow:'为您的生意量身规划',business:'商家收款方案',datePrefix:'有效期至：',dateMissing:'请填写方案有效期',settlement:'到账时间：',termMissing:'请填写到账时间',empty:'请选择至少一种收款方式。',financing:'让顾客轻松分期',financingPDF:'分期收款',cost:'收款总费率',withIVA:'（含IVA）',total:'总费率：收款手续费 + 分期费用',taxWith:'费率已含21% IVA。',taxWithout:'费率不含IVA。',closing:'让每一次沟通更进一步',closingStrong:'用清晰方案开启合作',footer:'商业条件由顾问提供。',scope:'适用范围及有效期以本方案为准。',methods:{debit:'现金卡',prepaid:'预付卡',credit:'信用卡（一次付清）',qr:'扫码支付'},qr:{money:'账户余额',debit:'现金卡',credit:'信用卡',consumer:'Mercado Pago信贷'}}
+  });
+  const copyFor=language=>COPY[language]||COPY.es;
+  const validityLabel=(value,language='es')=>validDate(value)?copyFor(language).datePrefix+new Intl.DateTimeFormat(language==='zh-CN'?'zh-CN':'es-AR',{timeZone:'UTC',day:'2-digit',month:'2-digit',year:'numeric'}).format(new Date(value+'T12:00:00Z')):copyFor(language).dateMissing;
+  const taxLabel=(includeIVA,language='es')=>copyFor(language)[includeIVA?'taxWith':'taxWithout'];
+  const installmentLabel=(count,language)=>language==='zh-CN'?count+'期':count+' cuotas';
+  function settlementLabel(value,language){
+    if(language!=='zh-CN')return value;
+    const term=normalize(value),known={'Al momento':'即时到账','Inmediato':'即时到账','Inmediata':'即时到账'};
+    if(known[term])return known[term];
+    const days=term.match(/^(\d+) d[ií]as?(?: (corridos|h[aá]biles))?$/i);
+    if(days)return days[1]+(days[2]&&/h[aá]biles/i.test(days[2])?'个工作日':'个自然日');
+    const hours=term.match(/^(\d+)\s*(?:h|hs|horas?)$/i);return hours?hours[1]+'小时':term;
+  }
+  function itemLabel(item,data){const copy=copyFor(data.proposalLanguage);return item.method==='qr'&&data.qrCondition?copy.methods.qr+' · '+(copy.qr[data.qrCondition.split('-')[0]]||''):copy.methods[item.method];}
+
   function validate(values){
-    const data={items:[],financing:[]},errors={};
+    const data={items:[],financing:[],proposalLanguage:values.proposalLanguage==='zh-CN'?'zh-CN':'es'},errors={};
     for(const key of ['business','adviser','contact','benefit']){
       data[key]=normalize(values[key]);if(data[key].length>LIMITS[key])errors[key]='Usá hasta '+LIMITS[key]+' caracteres.';
     }
@@ -88,10 +104,12 @@
   }
   function element(tag,className,value){const node=document.createElement(tag);node.className=className;if(value!==undefined)node.textContent=value;return node;}
   function preview(){
-    const result=validate(read()),data=result.data;
-    $('previewBusiness').textContent=data.business||'Propuesta comercial';$('previewAdviser').textContent=data.adviser;
+    const result=validate(read()),data=result.data,language=data.proposalLanguage,copy=copyFor(language);
+    $('proposalPreview').setAttribute('lang',language==='zh-CN'?'zh-CN':'es-AR');
+    for(const [id,value] of Object.entries({previewType:copy.type,previewEyebrow:copy.eyebrow,previewEmpty:copy.empty,previewFinancingTitle:copy.financing,previewClosing:copy.closing,previewClosingStrong:copy.closingStrong,previewFooter:copy.footer,previewScope:copy.scope}))$(id).textContent=value;
+    $('previewBusiness').textContent=data.business||copy.business;$('previewAdviser').textContent=data.adviser;
     $('previewContact').textContent=data.contact;$('previewBenefit').textContent=data.benefit;
-    $('previewValidity').textContent=validityLabel(data.validUntil);$('previewTaxScope').textContent=taxLabel(data.includeIVA);
+    $('previewValidity').textContent=validityLabel(data.validUntil,language);$('previewTaxScope').textContent=taxLabel(data.includeIVA,language);
     const preset=data.sourceMode==='presets';$('province').disabled=!preset;$('release').disabled=!preset;
     $('qrCondition').disabled=!preset||!$('show-qr').checked;
     $('round').disabled=!data.showFinancing;
@@ -103,14 +121,14 @@
     }
     const cards=data.items.map(item=>{
       const card=element('article','rate-card');card.dataset.method=item.method;
-      const top=element('div','rate-card-top');top.append(element('span','rate-card-method',item.label),element('span','rate-spark','✦'));
-      const rate=element('div','proposal-rate'),value=displayRate(item.rate,data.includeIVA);rate.append(document.createTextNode(value===null?'—':formatRate(value)),element('span','','%'));
-      const term=element('p','settlement-preview');term.append(element('span','',item.settlement?'Acreditación: '+item.settlement:'Plazo a completar'));
+      const top=element('div','rate-card-top');top.append(element('span','rate-card-method',itemLabel(item,data)),element('span','rate-spark','✦'));
+      const rate=element('div','proposal-rate'),value=displayRate(item.rate,data.includeIVA);rate.append(document.createTextNode(value===null?'—':formatRate(value,language)),element('span','','%'));
+      const term=element('p','settlement-preview');term.append(element('span','',item.settlement?copy.settlement+settlementLabel(item.settlement,language):copy.termMissing));
       card.append(top,rate,term);return card;
     });
     $('previewRates').replaceChildren(...cards);$('previewRates').dataset.count=String(cards.length);$('previewEmpty').hidden=cards.length>0||data.showFinancing;
     $('previewFinancing').hidden=!data.showFinancing;
-    const rows=data.financing.map(item=>{const row=element('article','installment-row');row.dataset.count=String(item.count);const value=displayRate(item.total,data.includeIVA);row.append(element('strong','',item.count+' cuotas'),element('span','',value===null?'—':formatRate(value)+'%'),element('small','','Costo total de cobro'+(data.includeIVA?' con IVA':'')));return row;});
+    const rows=data.financing.map(item=>{const row=element('article','installment-row');row.dataset.count=String(item.count);const value=displayRate(item.total,data.includeIVA);row.append(element('strong','',installmentLabel(item.count,language)),element('span','',value===null?'—':formatRate(value,language)+'%'),element('small','',copy.cost+(data.includeIVA?copy.withIVA:'')));return row;});
     $('previewInstallments').replaceChildren(...rows);return result;
   }
   let savedRateTable=TABLE.blank(),importNumber=0,legacyOriginal=null;
@@ -185,7 +203,7 @@
   let localCount=getCount();
   function paintCount(){if(!localCount)return;$('localCount').hidden=false;$('localCount').textContent=localCount+' PDF '+(localCount===1?'creado':'creados')+' en este navegador · contador local';}
   function increaseCount(){localCount=Math.min(localCount+1,999999);try{root.localStorage.setItem(COUNT_KEY,String(localCount));}catch(_){}paintCount();}
-  const font=(ctx,size,weight=400)=>{ctx.font=weight+' '+size+'px Arial, "Helvetica Neue", sans-serif';};
+  const font=(ctx,size,weight=400)=>{ctx.font=weight+' '+size+'px Arial, "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", sans-serif';};
   function wrapText(ctx,text,maxWidth,maxLines=10){
     const characters=Array.from(text),lines=[];let line='';for(const character of characters){if(line&&ctx.measureText(line+character).width>maxWidth){lines.push(line.trim());line=character.trimStart();}else line+=character;}if(line)lines.push(line.trim());
     if(lines.length<=maxLines)return lines;const result=lines.slice(0,maxLines);let last=result[maxLines-1];while(last&&ctx.measureText(last+'…').width>maxWidth)last=last.slice(0,-1);result[maxLines-1]=last+'…';return result;
@@ -196,17 +214,17 @@
     const canvas=document.createElement('canvas'),width=720,scale=2;canvas.width=width*scale;canvas.height=height*scale;
     const ctx=canvas.getContext('2d');if(!ctx)throw Error('Tu navegador no pudo preparar el PDF.');
     ctx.scale(scale,scale);ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);ctx.fillStyle='#ffe600';ctx.fillRect(0,0,width,12);
-    const navy='#082f49',muted='#728c9c',margin=44,right=676,logo=$('proposalLogo');
+    const navy='#082f49',muted='#728c9c',margin=44,right=676,logo=$('proposalLogo'),language=data.proposalLanguage,copy=copyFor(language);
     if(!logo?.complete||!logo.naturalWidth)throw Error('No se pudo cargar el logo de Mercado Pago. Recargá la página e intentá de nuevo.');
     ctx.drawImage(logo,118,101,813,223,44,28,180,180*223/813);
-    rounded(ctx,576,42,101,29,7,'#f1f6f8');text(ctx,'PROPUESTA',591,62,10,'#8096a3',700);
+    rounded(ctx,576,42,101,29,7,'#f1f6f8');text(ctx,copy.type,591,62,10,'#8096a3',700);
     ctx.strokeStyle='#e5edf2';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(margin,99);ctx.lineTo(right,99);ctx.stroke();
     let headerEnd=112;
     if(data.adviser){font(ctx,14,700);for(const line of wrapText(ctx,data.adviser,632,2)){text(ctx,line,margin,headerEnd+14,14,'#35596e',700);headerEnd+=18;}}
     if(data.contact){font(ctx,12);for(const line of wrapText(ctx,data.contact,632,2)){text(ctx,line,margin,headerEnd+12,12,'#668293');headerEnd+=17;}}
-    text(ctx,validityLabel(data.validUntil),margin,headerEnd+27,12,'#3d687b',700);headerEnd+=48;
-    text(ctx,'PENSADA PARA TU NEGOCIO',margin,headerEnd+27,11,'#809caa',700);
-    const business=data.business||'Propuesta comercial';let businessSize=43;font(ctx,businessSize,700);while(wrapText(ctx,business,632).length>3&&businessSize>28)font(ctx,--businessSize,700);
+    text(ctx,validityLabel(data.validUntil,language),margin,headerEnd+27,12,'#3d687b',700);headerEnd+=48;
+    text(ctx,copy.eyebrow,margin,headerEnd+27,11,'#809caa',700);
+    const business=data.business||copy.business;let businessSize=43;font(ctx,businessSize,700);while(wrapText(ctx,business,632).length>3&&businessSize>28)font(ctx,--businessSize,700);
     const businessLines=wrapText(ctx,business,632,3),lineHeight=Math.ceil(businessSize*1.1),businessY=headerEnd+77;
     businessLines.forEach((line,index)=>text(ctx,line,margin,businessY+index*lineHeight,businessSize,navy,700));
     let y=businessY+(businessLines.length-1)*lineHeight+29;
@@ -215,29 +233,29 @@
     data.items.forEach((item,index)=>{
       const wide=count===1||(count===3&&index===2),cardWidth=wide?632:307,x=margin+(index%columns)*(307+gap),top=y+Math.floor(index/columns)*(cardHeight+gap),inset=count===1?31:24;
       rounded(ctx,x,top,cardWidth,cardHeight,count===1?22:17,'#ffe600');font(ctx,count===1?11:10,700);
-      const labels=wrapText(ctx,item.label.toUpperCase(),cardWidth-inset*2-22,2);labels.forEach((line,i)=>text(ctx,line,x+inset,top+31+i*13,count===1?11:10,'#496035',700));
+      const labels=wrapText(ctx,itemLabel(item,data).toUpperCase(),cardWidth-inset*2-22,2);labels.forEach((line,i)=>text(ctx,line,x+inset,top+31+i*13,count===1?11:10,'#496035',700));
       text(ctx,'✦',x+cardWidth-inset-18,top+39,count===1?29:22,'#173f3b',500);
-      const value=displayRate(item.rate,data.includeIVA),rate=formatRate(value);let size=count===1?110:68;
+      const value=displayRate(item.rate,data.includeIVA),rate=formatRate(value,language);let size=count===1?110:68;
       font(ctx,size,700);while(ctx.measureText(rate).width+38>cardWidth-inset*2&&size>35)font(ctx,--size,700);
       const rateWidth=ctx.measureText(rate).width,baseline=top+(count===1?151:116);
       text(ctx,rate,x+inset,baseline,size,navy,700);text(ctx,'%',x+inset+rateWidth+8,baseline-2,count===1?45:28,navy,700);
-      font(ctx,11);wrapText(ctx,'Acreditación: '+item.settlement,cardWidth-inset*2,3).forEach((line,i)=>text(ctx,line,x+inset,top+(count===1?200:151)+i*16,11,'#426443'));
+      font(ctx,11);wrapText(ctx,copy.settlement+settlementLabel(item.settlement,language),cardWidth-inset*2,3).forEach((line,i)=>text(ctx,line,x+inset,top+(count===1?200:151)+i*16,11,'#426443'));
     });
     if(count)y+=rows*cardHeight+(rows-1)*gap+31;
     if(data.financing.length){
-      text(ctx,'COBRÁ EN CUOTAS',margin,y+8,15,navy,700);text(ctx,'Costo total: procesamiento + financiación'+(data.includeIVA?' + IVA.':'.'),margin,y+29,11,muted);
-      font(ctx,11);const termLines=wrapText(ctx,'Acreditación: '+data.financingTerm,632,2);termLines.forEach((line,i)=>text(ctx,line,margin,y+48+i*15,11,muted));y+=65+(termLines.length-1)*15;
-      data.financing.forEach((item,index)=>{const x=margin+(index%2)*325,top=y+Math.floor(index/2)*85;rounded(ctx,x,top,307,72,12,'#edf7fb');text(ctx,item.count+' cuotas',x+18,top+24,12,'#517589',700);text(ctx,formatRate(displayRate(item.total,data.includeIVA))+'%',x+18,top+55,27,navy,700);});
+      text(ctx,copy.financingPDF,margin,y+8,15,navy,700);text(ctx,copy.total+(data.includeIVA?' + IVA.':'.'),margin,y+29,11,muted);
+      font(ctx,11);const termLines=wrapText(ctx,copy.settlement+settlementLabel(data.financingTerm,language),632,2);termLines.forEach((line,i)=>text(ctx,line,margin,y+48+i*15,11,muted));y+=65+(termLines.length-1)*15;
+      data.financing.forEach((item,index)=>{const x=margin+(index%2)*325,top=y+Math.floor(index/2)*85;rounded(ctx,x,top,307,72,12,'#edf7fb');text(ctx,installmentLabel(item.count,language),x+18,top+24,12,'#517589',700);text(ctx,formatRate(displayRate(item.total,data.includeIVA),language)+'%',x+18,top+55,27,navy,700);});
       y+=Math.ceil(data.financing.length/2)*85+15;
     }
-    font(ctx,11);const taxLines=wrapText(ctx,taxLabel(data.includeIVA),632,2);taxLines.forEach((line,i)=>text(ctx,line,margin,y+10+i*16,11,'#64818e'));y+=taxLines.length*16+35;
-    rounded(ctx,margin,y-1,39,39,20,'#e9f8f8');text(ctx,'✓',margin+12,y+25,20,'#138b92',700);text(ctx,'Una buena conversación',margin+56,y+13,13,muted);text(ctx,'empieza con una propuesta clara.',margin+56,y+35,14,'#355e75',700);
+    font(ctx,11);const taxLines=wrapText(ctx,taxLabel(data.includeIVA,language),632,2);taxLines.forEach((line,i)=>text(ctx,line,margin,y+10+i*16,11,'#64818e'));y+=taxLines.length*16+35;
+    rounded(ctx,margin,y-1,39,39,20,'#e9f8f8');text(ctx,'✓',margin+12,y+25,20,'#138b92',700);text(ctx,copy.closing,margin+56,y+13,13,muted);text(ctx,copy.closingStrong,margin+56,y+35,14,'#355e75',700);
     const footerY=Math.max(y+74,1010);if(footerY+64>height)return drawProposal(data,Math.ceil(footerY+64));
-    ctx.fillStyle='#f8fafb';ctx.fillRect(0,footerY,width,height-footerY);text(ctx,'Condiciones informadas por el asesor.',margin,footerY+29,10,'#8b9eaa');text(ctx,validityLabel(data.validUntil),margin,footerY+46,10,'#8b9eaa');ctx.textAlign='right';text(ctx,'by Martin Yu',right,footerY+45,11,'#8fa3af');ctx.textAlign='left';return canvas;
+    ctx.fillStyle='#f8fafb';ctx.fillRect(0,footerY,width,height-footerY);text(ctx,copy.footer,margin,footerY+29,10,'#8b9eaa');text(ctx,validityLabel(data.validUntil,language),margin,footerY+46,10,'#8b9eaa');ctx.textAlign='right';text(ctx,'by Martin Yu',right,footerY+45,11,'#8fa3af');ctx.textAlign='left';return canvas;
   }
   function canvasBlob(canvas){return new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(Error('No se pudo preparar el archivo. Probá otra vez.')),'image/jpeg',0.95));}
   async function download(data){
-    if(document.fonts?.ready)await document.fonts.ready;const logo=$('proposalLogo');if(typeof logo?.decode==='function')await logo.decode();const canvas=drawProposal(data),jpeg=new Uint8Array(await (await canvasBlob(canvas)).arrayBuffer()),bytes=root.PublicDemoPDF.imagePDF(jpeg,canvas.width,canvas.height),blob=new Blob([bytes],{type:'application/pdf'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='propuesta-comercial.pdf';link.hidden=true;document.body.append(link);try{link.click();}finally{link.remove();root.setTimeout(()=>URL.revokeObjectURL(url),30000);}return blob;
+    if(document.fonts?.ready)await document.fonts.ready;const logo=$('proposalLogo');if(typeof logo?.decode==='function')await logo.decode();const canvas=drawProposal(data),jpeg=new Uint8Array(await (await canvasBlob(canvas)).arrayBuffer()),bytes=root.PublicDemoPDF.imagePDF(jpeg,canvas.width,canvas.height),blob=new Blob([bytes],{type:'application/pdf'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=data.proposalLanguage==='zh-CN'?'propuesta-comercial-zh.pdf':'propuesta-comercial.pdf';link.hidden=true;document.body.append(link);try{link.click();}finally{link.remove();root.setTimeout(()=>URL.revokeObjectURL(url),30000);}return blob;
   }
   let busy=false;
   async function submit(event){
@@ -249,6 +267,7 @@
     options($('release'),PRESETS.RELEASES,PRESETS.RELEASES[0].id);options($('round'),PRESETS.ROUNDS,PRESETS.ROUNDS[0].id);
     $('validUntil').min=todayISO();initTable();applySavedCondition();
     for(const key of ['sourceMode','category','province','release'])$(key).addEventListener('change',applySavedCondition);
+    $('proposalLanguage').addEventListener('change',()=>{edited();reportErrors({});preview();});
     $('qrCondition').addEventListener('change',()=>{applyQR();edited();reportErrors({});preview();});
     $('round').addEventListener('change',()=>{applyRound();edited();reportErrors({});preview();});
     for(const key of ['includeIVA','showFinancing',...COUNTS.map(count=>'installment-'+count)])$(key).addEventListener('change',()=>{edited();reportErrors({});preview();});
