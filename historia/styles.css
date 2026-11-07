@@ -22,3 +22,13 @@ dialog{color:var(--light);background:#112031;border:1px solid #74899b4d;border-r
 @media(max-width:700px){.header-actions{gap:7px}.header-actions>button{min-height:32px;padding:7px 9px;font-size:9px}.header-actions>#sound-settings{width:32px;height:32px}.header-actions .story-create{font-size:9px;padding:9px 11px;gap:9px;min-height:36px}.wordmark{gap:8px}.wordmark small{letter-spacing:.6px}}
 @media(max-width:370px){.story-create .cta-wide{display:none}.story-create .cta-short{display:inline}.header-actions .story-create{padding-inline:10px;gap:8px}.stage-header{gap:9px}}
 @media(prefers-reduced-motion:reduce){.header-actions .story-create{transition:none}.story-create:hover{transform:none}}
+/* Figure has a user-agent margin; cards share a stable safe area in short windows. */
+.origin-message{margin:0}
+@media(min-width:701px) and (max-height:680px){
+ .stage{--panel-safe-top:94px;--panel-safe-bottom:84px}
+ .origin-message,.comparison-panel{top:calc((var(--panel-safe-top) + 100svh - var(--panel-safe-bottom))/2);max-height:calc(100svh - var(--panel-safe-top) - var(--panel-safe-bottom) - 24px);overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#657e8f #132336;transform:translateY(calc(-50% + 15px)) rotate(2deg)}
+ .origin-message{transform:translateY(calc(-50% + 15px)) rotate(-3deg)}
+ .comparison-panel.is-visible{transform:translateY(-50%) rotate(2deg)}
+ .origin-message.is-visible{transform:translateY(-50%) rotate(-3deg)}
+}
+@media(min-width:701px) and (max-height:600px){.stage{--panel-safe-top:72px;--panel-safe-bottom:70px}}
