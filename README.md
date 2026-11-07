@@ -35,6 +35,12 @@ Los respaldos anteriores siguen siendo compatibles. Los valores declarados con I
 
 La entrada muestra los principios en un fondo animado, con luces lentas y las opciones **Comenzar** y **Saltear**. Podés pausar los efectos o volver a verlos desde **Inicio**. Se respeta la preferencia de movimiento reducido y haber visto la bienvenida se recuerda sólo en el navegador.
 
+## De la bienvenida al trabajo
+
+El inicio continúa la paleta azul y amarilla de la bienvenida, con luz suave y una propuesta flotante. El editor organiza las condiciones en un entorno oscuro; la propuesta y el PDF conservan el papel claro y las tasas amarillas. **Crear propuesta PDF** confirma visualmente la generación sin reproducir sonido. Se respeta movimiento reducido.
+
+El [espacio del equipo](https://hightechbusiness.github.io/meli-propuestas-by-martin-yu/equipo/) explica las opciones ampliadas y conserva el ingreso con identidad verificada. También permite recorrer el README, los cambios publicados y las plantillas para mejoras y problemas.
+
 ## Qué podés gestionar
 
 | Herramienta | Versión inicial · acceso libre | Espacio del equipo · acceso verificado |
@@ -53,7 +59,9 @@ La entrada muestra los principios en un fondo animado, con luces lentas y las op
 
 El formulario, las imágenes del PDF y los respaldos se procesan en tu navegador. No se envían nombres, contactos, clientes ni contenido de propuestas. Sólo se conserva expresamente la tabla personal y las preferencias locales de uso.
 
-La versión inicial no envía eventos a un contador central. El uso privado del equipo se registra por separado: correo verificado, acción y fecha/hora, visibles sólo con las cuentas administradoras autorizadas. El alojamiento puede conservar sus registros técnicos habituales.
+La versión inicial no envía eventos a un contador central. Para seguir el interés en el código público, podés usar las [estadísticas del repositorio en GitHub](https://github.com/hightechbusiness/meli-propuestas-by-martin-yu/graphs/traffic), disponibles para quienes tienen permisos de escritura. Miden tráfico del repositorio; no cuentan PDFs generados ni visitas a GitHub Pages.
+
+El uso privado del equipo se registra por separado: correo verificado, acción y fecha/hora, visibles sólo con las cuentas administradoras autorizadas. El alojamiento puede conservar sus registros técnicos habituales.
 
 Este repositorio público contiene la presentación, la versión inicial, el portal de acceso y las plantillas para sugerencias. Las referencias publicadas se limitan al segmento aprobado de Cat. 1–5 y PSJ–R5. No contiene Cat. 6 precargada, R5+, planes especiales, competencia, el maestro completo ni los archivos internos del proyecto. Las tablas propias no se incorporan al repositorio.
 
