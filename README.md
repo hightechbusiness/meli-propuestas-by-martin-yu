@@ -6,7 +6,15 @@
 
 Prepará una propuesta de Mercado Pago desde el celular o la computadora. La **versión inicial es de acceso libre**, con condiciones de referencia para Cat. 1 a Cat. 5 y financiación PSJ a R5.
 
-[**Crear mi propuesta →**](https://hightechbusiness.github.io/meli-propuestas-by-martin-yu/inicial/) · [Herramientas para el equipo](https://hightechbusiness.github.io/meli-propuestas-by-martin-yu/equipo/)
+[**Conocer la historia →**](https://hightechbusiness.github.io/meli-propuestas-by-martin-yu/) · [**Crear mi propuesta →**](https://hightechbusiness.github.io/meli-propuestas-by-martin-yu/inicial/) · [Herramientas para el equipo](https://hightechbusiness.github.io/meli-propuestas-by-martin-yu/equipo/)
+
+## Un recorrido, tres espacios
+
+- **Inicio:** la historia de cómo nació el proyecto, desde el ingreso al equipo en junio hasta una propuesta que llega al mostrador. Se recorre con scroll o con Ver recorrido; incluye acceso directo al generador.
+- **Crear propuesta:** la versión inicial para preparar un PDF. Guía vuelve a abrir su bienvenida; el logo e Inicio regresan a la portada.
+- **Equipo:** funciones ampliadas, acceso verificado y enlaces al proyecto en GitHub.
+
+La portada usa una escena ilustrativa y dos tasas de ejemplo; no publica el maestro completo ni ejecuta transacciones. El sonido de confirmación es el archivo breve elegido para la escena y puede desactivarse. No incluye un contador público.
 
 ## Una propuesta lista en pocos pasos
 
