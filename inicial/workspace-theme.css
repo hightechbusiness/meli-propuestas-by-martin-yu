@@ -1,0 +1,527 @@
+/*
+ * Workspace theme · local preview only
+ * Scope: .editor and .local-table (including its optional financing table).
+ * No global variables, page selectors, .preview-area, .proposal or PDF styles.
+ * Payment-method form cards use .proposal-item; these are editor controls,
+ * not the exported .proposal document. Layout and calculation logic are untouched.
+ */
+
+.editor,
+.local-table {
+  --workspace-base: #071321;
+  --workspace-panel: #0b1d30;
+  --workspace-raised: #10283b;
+  --workspace-line: #29465b;
+  --workspace-text: #edf6fa;
+  --workspace-label: #cadde8;
+  --workspace-muted: #a0bacb;
+  --workspace-cyan: #8bd8ea;
+  --workspace-yellow: #ffe600;
+  --workspace-error: #ffb6a7;
+  color-scheme: dark;
+  color: var(--workspace-text);
+}
+
+.editor.panel {
+  background: linear-gradient(145deg, #10263a 0%, #0b1d30 42%, #091827 100%);
+  border-color: #314d61;
+  box-shadow: 0 22px 60px #0000002e, inset 0 1px 0 #b6e5f00b;
+}
+
+.editor .panel-heading { border-color: #2b4559; }
+.editor .panel-heading h2 { color: #f0f7fb; }
+.editor .panel-heading p { color: #a5bfce; }
+.editor .step {
+  color: #ffe986;
+  background: #ffe60008;
+  border-color: #ffe6004a;
+  box-shadow: inset 0 0 12px #ffe60005;
+}
+.editor .local-pill {
+  color: #b6d0df;
+  background: #112c40;
+  border-color: #365469;
+}
+
+.editor .field label,
+.local-table .field label { color: var(--workspace-label); }
+.editor .optional { color: #9cb6c7; }
+.editor .field > small,
+.editor .category-help,
+.editor .financing-help,
+.editor .item-status,
+.editor .privacy-note,
+.local-table .field > small { color: var(--workspace-muted); }
+.editor .field > small,
+.editor .item-status { line-height: 1.7; }
+.editor .financing-help strong,
+.editor .category-help strong,
+.editor .field > small strong,
+.local-table .table-base-note strong { color: #deedf5; }
+.editor .category-help a,
+.editor .field a,
+.local-table .table-base-note a,
+.local-table .local-table-note a {
+  color: #8bd8ea;
+  text-decoration-color: #8bd8ea80;
+  text-underline-offset: 3px;
+}
+.editor .category-help a:hover,
+.local-table a:hover { color: #c0f4ff; }
+.editor .privacy-note svg { stroke: #abc7d5; }
+
+.editor input:not(:where([type="checkbox"], [type="radio"], [type="hidden"])),
+.editor .field input:not(:where([type="checkbox"], [type="radio"], [type="hidden"])),
+.editor textarea,
+.editor select,
+.local-table input:not(:where([type="checkbox"], [type="radio"], [type="hidden"])),
+.local-table textarea,
+.local-table select {
+  color: #eef7fb;
+  background: #071321;
+  border-color: #35546a;
+  box-shadow: inset 0 1px 3px #00000016;
+  caret-color: #ffe600;
+  color-scheme: dark;
+  transition: none;
+}
+.editor input::placeholder,
+.editor textarea::placeholder,
+.local-table input::placeholder,
+.local-table textarea::placeholder { color: #8ea9bd; opacity: 1; }
+.editor select option,
+.local-table select option { color: #eef7fb; background: #0b1d30; }
+.editor input:focus-visible,
+.editor textarea:focus-visible,
+.editor select:focus-visible,
+.local-table input:focus-visible,
+.local-table textarea:focus-visible,
+.local-table select:focus-visible {
+  border-color: #8bd8ea;
+  outline: 3px solid #77d0e43d;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 1px #8bd8ea26;
+}
+.editor input:-webkit-autofill,
+.editor textarea:-webkit-autofill,
+.local-table input:-webkit-autofill {
+  -webkit-text-fill-color: #eef7fb;
+  -webkit-box-shadow: 0 0 0 100px #071321 inset;
+  caret-color: #ffe600;
+}
+.editor input:disabled,
+.editor textarea:disabled,
+.editor select:disabled,
+.local-table input:disabled,
+.local-table textarea:disabled,
+.local-table select:disabled {
+  color: #8fa6b6;
+  -webkit-text-fill-color: #8fa6b6;
+  background: #0a1725;
+  border-color: #2b4053;
+  cursor: not-allowed;
+  opacity: 1;
+  box-shadow: none;
+}
+.editor .field-error,
+.editor .form-status[data-error="true"],
+.local-table .field-error,
+.local-table .table-status[data-error="true"],
+.local-table .table-status.error { color: var(--workspace-error); }
+.editor .field-error { font-size: 11px; line-height: 1.6; }
+.editor input[aria-invalid="true"],
+.editor textarea[aria-invalid="true"],
+.editor select[aria-invalid="true"],
+.local-table input[aria-invalid="true"],
+.local-table textarea[aria-invalid="true"],
+.local-table select[aria-invalid="true"] {
+  border-color: #ee9b8b;
+  background: #281d2b;
+}
+.editor input[aria-invalid="true"]:focus-visible,
+.editor textarea[aria-invalid="true"]:focus-visible,
+.editor select[aria-invalid="true"]:focus-visible,
+.local-table input[aria-invalid="true"]:focus-visible {
+  outline-color: #f5ad9a45;
+  border-color: #ffc1ad;
+}
+
+.editor .rate-field {
+  background: #0b1d30;
+  border-color: #2b485e;
+}
+.editor .rate-input input { color: #f5faff; background: #071321; }
+.editor .rate-input > span,
+.editor .item-rate-input > span,
+.local-table .local-percent > span { color: #adc8d9; }
+.editor .example-tag {
+  color: #f3e99e;
+  background: #ffe60013;
+  border: 1px solid #ffe6002b;
+}
+.editor .rate-origin {
+  color: #b8dbe6;
+  background: #0f293d;
+  border-color: #31576d;
+}
+.editor .rate-origin strong { color: #e6f4f9; }
+
+.editor .proposal-items legend,
+.editor .financing-options > legend { color: #edf6fa; }
+.editor .proposal-item {
+  background: #0b1d30;
+  border-color: #2c495f;
+  transition: none;
+}
+.editor .proposal-item[data-enabled="true"] {
+  background: linear-gradient(145deg, #102a3b, #0d2133);
+  border-color: #72855f;
+  box-shadow: inset 0 1px 0 #ffe6000f, 0 0 0 1px #b7d3b807;
+}
+.editor .proposal-item[data-enabled="false"] {
+  background: #0a1929;
+  border-color: #39556a;
+  border-style: dashed;
+  box-shadow: none;
+}
+.editor .proposal-item[data-enabled="false"] .item-fields { opacity: 1; }
+.editor .method-toggle { color: #d7e8f0; }
+.editor .method-toggle input,
+.local-table input[type="checkbox"],
+.local-table input[type="radio"] {
+  accent-color: #ffe600;
+  color-scheme: dark;
+}
+.editor .method-toggle input:disabled { opacity: .6; }
+.editor .method-toggle input:focus-visible,
+.local-table input[type="checkbox"]:focus-visible {
+  outline: 3px solid #8bd8ea;
+  outline-offset: 4px;
+  box-shadow: none;
+}
+.editor .method-chip {
+  color: #a6d5e4;
+  background: #143247;
+  border: 1px solid #3b647650;
+}
+.editor .proposal-item[data-enabled="false"] .method-chip {
+  color: #91abbd;
+  background: #14283a;
+  border-color: #30495e;
+}
+.editor .item-fields .field label,
+.editor .installment-choice .field label { color: #b3cbd9; }
+.editor .item-fields .field input,
+.editor .installment-choice .field input { background: #071321; }
+.editor .item-fields .field input:disabled,
+.editor .installment-choice .field input:disabled { background: #0a1725; }
+.editor .qr-condition-field small { color: #a6bfce; }
+.editor .installment-choices > legend { color: #c5dce8; }
+.editor .installment-choice {
+  background: #0b1d30;
+  border-color: #2c495f;
+}
+.editor .installment-choice:has(.method-toggle input:checked) {
+  background: #102838;
+  border-color: #647a61;
+  box-shadow: inset 0 1px 0 #ffe6000a;
+}
+.editor .iva-control {
+  background: #112c3c;
+  border-color: #3a5b69;
+}
+.editor .iva-control:has(input:checked) { border-color: #899451; }
+.editor .iva-control p { color: #afc9d6; }
+.editor .iva-control strong { color: #e1edf4; }
+.editor .form-status { color: #a4d6d1; }
+
+.editor .primary-button {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  color: #071321;
+  background: #ffe600;
+  box-shadow: 0 7px 24px #ffe60016, inset 0 1px 0 #fff6b9b0;
+}
+.editor .primary-button > * { position: relative; z-index: 1; }
+.editor .primary-button:hover:not(:disabled) {
+  background: #ffeb37;
+  box-shadow: 0 9px 28px #ffe60025, inset 0 1px 0 #fff9cbb0;
+}
+.editor .primary-button:not(:disabled)::after {
+  content: "";
+  position: absolute;
+  inset: -100% -30%;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(110deg, transparent 35%, #fffde55c 48%, transparent 60%);
+  transform: translateX(-100%);
+  animation: workspace-cta-glint 2.8s ease-out 1 both;
+}
+.editor .primary-button:disabled {
+  color: #c8cb9c;
+  background: #4a5135;
+  border: 1px solid #657047;
+  opacity: 1;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* PDF feedback is visual only. The controller owns .is-generated and busy state. */
+.editor #downloadButton { transition: transform .22s ease, box-shadow .3s ease, background .2s ease; }
+.editor #downloadButton:hover:not(:disabled) { transform: translateY(-2px); }
+.editor #downloadButton:not(:disabled)::after { animation-duration: 3.6s; }
+.editor #downloadButton.is-generated { animation: workspace-pdf-success .9s ease-out 1; }
+.editor #downloadButton.is-generated::before {
+  content: "✓";
+  position: absolute;
+  z-index: 2;
+  right: 11px;
+  top: 50%;
+  width: 25px;
+  height: 25px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #f2ffcf;
+  background: #173d35;
+  box-shadow: 0 0 15px #24604430;
+  font-size: 15px;
+  font-weight: 750;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%) scale(.75);
+  animation: workspace-pdf-check .9s ease-out 1 both;
+}
+.editor #downloadButton.is-generated > span:last-child { animation: workspace-pdf-arrow .9s ease-out 1; }
+.editor #downloadButton[aria-busy="true"] {
+  cursor: progress;
+  box-shadow: none;
+  transform: none;
+}
+.editor #downloadButton[aria-busy="true"]::after { animation-play-state: paused; opacity: .15; }
+.editor #downloadButton:disabled::before,
+.editor #downloadButton[aria-busy="true"]::before { display: none; }
+
+.local-table {
+  background: #0b1d30;
+  border-color: #2e4b61;
+  box-shadow: 0 18px 50px #00000020, inset 0 1px 0 #b6e5f008;
+}
+.local-table > summary {
+  color: #edf6fa;
+  background: linear-gradient(115deg, #10283c, #0b1d30);
+}
+.local-table > summary:hover { background: #122d42; }
+.local-table > summary:focus-visible,
+.local-table .custom-financing-panel > summary:focus-visible {
+  outline-color: #8bd8ea;
+}
+.local-table .local-table-mark {
+  color: #ffe97a;
+  background: #ffe6000e;
+  border: 1px solid #ffe6002b;
+}
+.local-table .local-table-heading { color: #edf6fa; }
+.local-table .local-table-heading small { color: #a6c0d1; }
+.local-table .local-table-badge {
+  color: #badce9;
+  background: #15384e;
+  border: 1px solid #2d5a70;
+}
+.local-table .local-table-chevron { color: #9dc7d7; }
+.local-table .local-table-body { border-color: #2b455c; }
+.local-table .local-table-intro h2 { color: #edf6fa; }
+.local-table .local-table-intro .eyebrow { color: #99b9c9; }
+.local-table .local-table-intro p:last-child,
+.local-table .local-table-stamp,
+.local-table .local-table-steps li,
+.local-table .local-table-note,
+.local-table .local-table-scroll-hint,
+.local-table .table-base-note { color: #a7bfce; }
+.local-table .local-table-stamp { border-color: #ffe600; }
+.local-table .local-table-stamp strong { color: #dfedf4; }
+.local-table .local-table-steps b {
+  background: #102a3f;
+  color: #d0e5ef;
+  border-color: #375970;
+}
+.local-table .local-table-scroll {
+  background: #071321;
+  border-color: #2d4b61;
+  scrollbar-color: #3d647d #071321;
+}
+.local-table .local-table-scroll:focus-visible {
+  outline-color: #8bd8ea;
+}
+.local-table .local-rates-table caption,
+.local-table .custom-finance-table caption {
+  color: #afc9d9;
+  background: #081726;
+}
+.local-table .local-rates-table th,
+.local-table .local-rates-table td,
+.local-table .custom-finance-table th,
+.local-table .custom-finance-table td {
+  color: #d9e8ef;
+  background: #0b1d30;
+  border-color: #284359;
+}
+.local-table .local-rates-table tbody tr:nth-child(even) td { background: #0e2437; }
+.local-table .local-rates-table thead th,
+.local-table .custom-finance-table thead th {
+  color: #d1e8f1;
+  background: #16344a;
+}
+.local-table .local-rates-table th:first-child,
+.local-table .custom-finance-table tbody th {
+  color: #e1edf5;
+  background: #10283d;
+  border-right-color: #2b4a61;
+}
+.local-table .local-rates-table thead th:first-child { background: #1a3b51; }
+.local-table .local-category { color: #e0edf5; }
+.local-table .local-rate-pair label {
+  color: #aec6d6;
+  font-size: 10px;
+  line-height: 1.5;
+}
+.local-table .local-rate-pair input,
+.local-table .custom-finance-table input { color: #edf7fc; background: #071321; border-color: #36566d; }
+.local-table .local-rate-pair input::placeholder { color: #8ea9bd; }
+.local-table .custom-financing-panel {
+  background: #0b1d30;
+  border-color: #2e4e64;
+}
+.local-table .custom-financing-panel > summary { color: #d5e8f3; background: #102b40; }
+.local-table .custom-financing-panel > .local-table-scroll { border-top-color: #2e4e64; }
+.local-table .table-button {
+  color: #c4e2ed;
+  background: #102b40;
+  border-color: #3a6079;
+}
+.local-table .table-button:hover:not(:disabled) {
+  color: #e8f8ff;
+  background: #173b51;
+  border-color: #79b7cc;
+}
+.local-table .table-button-primary {
+  color: #071321;
+  background: #ffe600;
+  border-color: #e5d000;
+}
+.local-table .table-button-primary:hover:not(:disabled) {
+  color: #071321;
+  background: #ffeb37;
+  border-color: #fff06a;
+}
+.local-table .table-button-quiet {
+  color: #a9c6d6;
+  background: #0b1c2d;
+  border-color: #2d4c63;
+}
+.local-table .table-button:disabled {
+  opacity: 1;
+  color: #899da9;
+  background: #102132;
+  border-color: #2b4053;
+}
+.local-table .table-status { color: #a1dbd2; }
+
+/* State rules stay after normal card/table controls so specificity cannot
+ * accidentally restore an enabled field's surface on a disabled/error input. */
+.editor .field input:focus-visible,
+.editor .field textarea:focus-visible,
+.editor .field select:focus-visible {
+  border-color: #8bd8ea;
+  outline: 3px solid #77d0e43d;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 1px #8bd8ea26;
+}
+.editor .field input:disabled,
+.editor .field textarea:disabled,
+.editor .field select:disabled,
+.local-table input:disabled,
+.local-table textarea:disabled,
+.local-table select:disabled {
+  color: #8fa6b6;
+  -webkit-text-fill-color: #8fa6b6;
+  background: #0a1725;
+  border-color: #2b4053;
+  cursor: not-allowed;
+  opacity: 1;
+  box-shadow: none;
+}
+.editor .field input[aria-invalid="true"],
+.editor .field textarea[aria-invalid="true"],
+.editor .field select[aria-invalid="true"],
+.local-table input[aria-invalid="true"],
+.local-table textarea[aria-invalid="true"],
+.local-table select[aria-invalid="true"] {
+  border-color: #ee9b8b;
+  background: #281d2b;
+}
+.editor .field input[aria-invalid="true"]:focus-visible,
+.editor .field textarea[aria-invalid="true"]:focus-visible,
+.editor .field select[aria-invalid="true"]:focus-visible,
+.local-table input[aria-invalid="true"]:focus-visible {
+  outline-color: #f5ad9a45;
+  border-color: #ffc1ad;
+}
+
+@keyframes workspace-cta-glint {
+  0%, 12% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+@keyframes workspace-pdf-success {
+  0%, 100% { box-shadow: 0 7px 24px #ffe60016, inset 0 1px 0 #fff6b9b0; }
+  42% { box-shadow: 0 0 0 7px #ffe60012, 0 0 36px #ffe60030, inset 0 1px 0 #fff9cba0; }
+}
+@keyframes workspace-pdf-check {
+  0% { opacity: 0; transform: translateY(-50%) scale(.75); }
+  24% { opacity: 1; transform: translateY(-50%) scale(1.04); }
+  68% { opacity: 1; transform: translateY(-50%) scale(1); }
+  100% { opacity: 0; transform: translateY(-50%) scale(1); }
+}
+@keyframes workspace-pdf-arrow {
+  0%, 80% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@media (max-width: 780px) {
+  .editor input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+  .editor textarea,
+  .editor select,
+  .local-table input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+  .local-table textarea,
+  .local-table select {
+    font-size: 16px;
+    min-height: 44px;
+  }
+  .editor .item-fields .field label,
+  .editor .installment-choice .field label { font-size: 11px; }
+  .editor .field > small,
+  .editor .category-help,
+  .editor .financing-help,
+  .editor .item-status { font-size: 10px; }
+  .local-table .local-rate-pair label { font-size: 10px; }
+  .local-table .local-percent > span { top: 14px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .editor .primary-button,
+  .editor .primary-button::after,
+  .editor #downloadButton,
+  .editor #downloadButton.is-generated,
+  .editor #downloadButton.is-generated::before,
+  .editor #downloadButton.is-generated > span:last-child,
+  .local-table .local-table-chevron {
+    animation: none !important;
+    transition: none !important;
+    transform: none;
+  }
+  .editor .primary-button::after { display: none; }
+  .editor #downloadButton::before { display: none; }
+  .editor #downloadButton:hover:not(:disabled) { transform: none; }
+}

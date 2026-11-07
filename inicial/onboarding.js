@@ -13,7 +13,7 @@
   }
   function cleanup(){
     document.documentElement.classList.remove('starter-welcome-open');
-    document.getElementById('category')?.focus();
+    document.getElementById('hero-title')?.focus({preventScroll:true});
   }
   function open(){
     if(dialog.open)return;
@@ -32,5 +32,6 @@
   pause.addEventListener('click',()=>{if(!reduced){paused=!paused;paintPause();}});
   reopen.addEventListener('click',open);reopen.disabled=false;paintPause();
   let seen=false;try{seen=window.localStorage.getItem(KEY)==='seen';}catch(_){}
-  if(!seen)open();
+  const forceWelcome=new URLSearchParams(window.location.search).get('inicio')==='1';
+  if(forceWelcome||!seen)open();
 })();

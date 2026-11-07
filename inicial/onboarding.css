@@ -27,6 +27,8 @@ html.starter-welcome-open{overflow:hidden}
 .starter-welcome-mark::after{content:"";position:absolute;inset:-45%;background:linear-gradient(115deg,transparent 38%,#fffd 49%,transparent 61%);transform:translateX(-150%);animation:starterMarkShine 5.4s .8s ease-in-out both;pointer-events:none}
 .starter-welcome-kicker{font-size:10px;font-weight:800;letter-spacing:.2em;color:#ffe600;margin:0 0 13px}
 .starter-welcome h2{font-size:clamp(36px,4.3vw,56px);font-weight:850;letter-spacing:-.045em;line-height:1.02;margin:0;color:#f7fbff}
+/* Keep the opening heading focused for assistive reading without a decorative frame. */
+.starter-welcome #welcomeTitle:focus{outline:none}
 .starter-welcome h2 em{display:block;font-style:normal;color:#ffe600;background:linear-gradient(105deg,#ffe600 0%,#ffe600 34%,#fff8d2 47%,#fff 50%,#fff8d2 53%,#ffe600 66%,#ffe600 100%);background-size:300% 100%;background-position:100% 0;-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;filter:drop-shadow(0 2px 8px #021626);animation:starterTitleGlint 7.4s .7s ease-in-out both}
 .starter-welcome-description{max-width:430px;margin:18px auto 0;font-size:14px;line-height:1.65;color:#b7d1df}
 .starter-welcome-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin:25px 0 23px;padding:0;list-style:none;text-align:left}

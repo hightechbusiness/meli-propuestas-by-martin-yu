@@ -1,7 +1,7 @@
 /* Independent public starter. Commercial conditions are entered by the adviser; form values never leave this browser. */
 (function(root){
   'use strict';
-  const COUNT_KEY='propuestas-demo-pdf-count',LIMITS={business:60,adviser:48,contact:80,benefit:110,settlement:40};
+  const LIMITS={business:60,adviser:48,contact:80,benefit:110,settlement:40};
   const TABLE=root.PublicRateTable,PRESETS=root.PublicRatePresets;
   const $=id=>document.getElementById(id),FORM_FIELDS=['business','adviser','contact','sourceMode','category','province','release','qrCondition','round','validUntil','benefit','proposalLanguage'];
   const METHODS=Object.keys(TABLE.METHODS),ITEM_FIELDS=METHODS.flatMap(method=>['rate-'+method,'settlement-'+method]);
@@ -199,10 +199,6 @@
     $('exportRateTable').addEventListener('click',exportTable);$('exportLegacyTable').addEventListener('click',exportLegacy);
     $('importRateTable').addEventListener('click',()=>$('rateTableFile').click());$('rateTableFile').addEventListener('change',()=>void importTable());
   }
-  function getCount(){try{const text=root.localStorage.getItem(COUNT_KEY)||'0';return /^\d{1,6}$/.test(text)?Math.min(Number(text),999999):0;}catch(_){return 0;}}
-  let localCount=getCount();
-  function paintCount(){if(!localCount)return;$('localCount').hidden=false;$('localCount').textContent=localCount+' PDF '+(localCount===1?'creado':'creados')+' en este navegador · contador local';}
-  function increaseCount(){localCount=Math.min(localCount+1,999999);try{root.localStorage.setItem(COUNT_KEY,String(localCount));}catch(_){}paintCount();}
   const font=(ctx,size,weight=400)=>{ctx.font=weight+' '+size+'px Arial, "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", sans-serif';};
   function wrapText(ctx,text,maxWidth,maxLines=10){
     const characters=Array.from(text),lines=[];let line='';for(const character of characters){if(line&&ctx.measureText(line+character).width>maxWidth){lines.push(line.trim());line=character.trimStart();}else line+=character;}if(line)lines.push(line.trim());
@@ -257,10 +253,16 @@
   async function download(data){
     if(document.fonts?.ready)await document.fonts.ready;const logo=$('proposalLogo');if(typeof logo?.decode==='function')await logo.decode();const canvas=drawProposal(data),jpeg=new Uint8Array(await (await canvasBlob(canvas)).arrayBuffer()),bytes=root.PublicDemoPDF.imagePDF(jpeg,canvas.width,canvas.height),blob=new Blob([bytes],{type:'application/pdf'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=data.proposalLanguage==='zh-CN'?'propuesta-comercial-zh.pdf':'propuesta-comercial.pdf';link.hidden=true;document.body.append(link);try{link.click();}finally{link.remove();root.setTimeout(()=>URL.revokeObjectURL(url),30000);}return blob;
   }
-  let busy=false;
+  let busy=false,buttonResetTimer=0;
+  function resetDownloadFeedback(){
+    root.clearTimeout(buttonResetTimer);const button=$('downloadButton');button.classList.remove('is-generated');button.querySelector('.button-label').textContent='Crear propuesta PDF';button.querySelector('.button-finish').textContent='↗';
+  }
   async function submit(event){
     event.preventDefault();if(busy)return;const result=preview();reportErrors(result.errors);const status=$('formStatus');status.dataset.error='false';if(!result.valid){status.dataset.error='true';status.textContent='Revisá los campos señalados para crear tu PDF.';const first=[...FORM_FIELDS,...ITEM_FIELDS,...FIN_FIELDS].find(key=>result.errors[key]);$(first||(result.errors.financing?'installment-'+COUNTS[0]:'show-debit')).focus();return;}
-    busy=true;$('downloadButton').disabled=true;status.textContent='Preparando tu propuesta…';try{await download(result.data);increaseCount();status.textContent='PDF generado. La descarga está lista en tu navegador.';$('downloadSuccess').hidden=false;}catch(_){status.dataset.error='true';status.textContent='No pudimos generar el PDF. Probá otra vez o usá un navegador actualizado.';}finally{busy=false;$('downloadButton').disabled=false;}
+    busy=true;resetDownloadFeedback();const button=$('downloadButton');button.disabled=true;button.setAttribute('aria-busy','true');button.querySelector('.button-label').textContent='Preparando tu propuesta…';status.textContent='Preparando tu propuesta…';
+    try{await download(result.data);status.textContent='Tu propuesta está lista para compartir.';$('downloadSuccess').hidden=false;button.classList.add('is-generated');button.querySelector('.button-label').textContent='Propuesta lista';button.querySelector('.button-finish').textContent='✓';buttonResetTimer=root.setTimeout(resetDownloadFeedback,2800);}
+    catch(_){resetDownloadFeedback();status.dataset.error='true';status.textContent='No pudimos generar el PDF. Probá otra vez o usá un navegador actualizado.';}
+    finally{busy=false;button.disabled=false;button.setAttribute('aria-busy','false');}
   }
   function init(){
     options($('province'),PRESETS.PROVINCES,PRESETS.PROVINCES.find(item=>item.id==='CABA')?.id||PRESETS.PROVINCES[0].id);
@@ -276,7 +278,7 @@
       $('show-'+method).addEventListener('change',()=>{edited();reportErrors({});preview();});
       for(const field of ['rate','settlement']){const key=field+'-'+method;$(key).addEventListener('input',()=>{$('item-'+method).dataset.custom='true';edited();preview();if($(key).getAttribute('aria-invalid')==='true')reportErrors(validate(read()).errors);});}
     }
-    $('demoForm').addEventListener('submit',submit);preview();paintCount();$('downloadButton').disabled=false;
+    $('demoForm').addEventListener('submit',submit);preview();$('downloadButton').disabled=false;
   }
   root.PublicDemo=Object.freeze({parseRate,formatRate,validate,wrapText,displayRate,todayISO,validDate});init();
 })(window);
