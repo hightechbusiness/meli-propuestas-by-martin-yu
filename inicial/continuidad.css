@@ -50,3 +50,10 @@ body>main,.site-footer{max-width:1184px}
 @media(prefers-reduced-motion:reduce){.project-links>a{transition:none}.project-links>a:hover{transform:none}}
 
 @media(max-width:600px){.site-header nav>.portal-home{display:none}}
+
+/* One pause preference follows the visitor from the welcome into the workspace. */
+.workspace-motion-pause{display:inline-flex;align-items:center;margin-top:13px;min-height:32px;padding:7px 11px;border:1px solid #a9d1e126;border-radius:999px;background:#ffffff03;color:#a7c2d3;font:inherit;font-size:9px;line-height:1.5;cursor:pointer}
+.workspace-motion-pause:hover:not(:disabled){color:#edf6fa;border-color:#a9d1e15c;background:#ffffff07}
+.workspace-motion-pause:focus-visible{outline:3px solid #8bd8ea;outline-offset:4px}
+.workspace-motion-pause:disabled{color:#91aebf;cursor:default}
+html[data-ui-motion-paused="true"] body::before,html[data-ui-motion-paused="true"] .hero-paper,html[data-ui-motion-paused="true"] .hero-ribbon .ribbon-travel{animation-play-state:paused!important}

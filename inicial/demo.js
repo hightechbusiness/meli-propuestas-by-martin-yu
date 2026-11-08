@@ -112,6 +112,7 @@
     $('previewValidity').textContent=validityLabel(data.validUntil,language);$('previewTaxScope').textContent=taxLabel(data.includeIVA,language);
     const preset=data.sourceMode==='presets';$('province').disabled=!preset;$('release').disabled=!preset;
     $('qrCondition').disabled=!preset||!$('show-qr').checked;
+    $('financingFields').hidden=!data.showFinancing;
     $('round').disabled=!data.showFinancing;
     for(const count of COUNTS){$('installment-'+count).disabled=!data.showFinancing;$('fin-rate-'+count).disabled=!data.showFinancing||!$('installment-'+count).checked;}
     for(const method of METHODS){
