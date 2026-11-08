@@ -8,6 +8,8 @@ Prepará una propuesta de Mercado Pago desde el celular o la computadora. La **v
 
 [**Conocer la historia →**](https://hightechbusiness.github.io/meli-propuestas-by-martin-yu/) · [**Crear mi propuesta →**](https://hightechbusiness.github.io/meli-propuestas-by-martin-yu/inicial/) · [Herramientas para el equipo](https://hightechbusiness.github.io/meli-propuestas-by-martin-yu/equipo/)
 
+[Punto en común · proceso y otros proyectos de Martin Yu →](https://hightechbusiness.github.io/)
+
 ## Un recorrido, tres espacios
 
 - **Inicio:** la historia de cómo nació el proyecto, desde el ingreso al equipo en junio hasta una propuesta que llega al mostrador. Se recorre con scroll o con Ver recorrido; incluye acceso directo al generador.
