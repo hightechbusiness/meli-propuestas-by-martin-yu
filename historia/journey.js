@@ -19,6 +19,7 @@
   const audioConfig=window.AgreementAudio;
   const builtInAudioSource=audioConfig.source;
   let audioContext=null,decodedAudio=null,decodePromise=null,activeSound=null,activeGain=null,customAudioBytes=null,audioRevision=0,audioBlocked=false;
+  let autoStartPending=!reduce.matches,visualReady=false;
   function stopSound(){
     audio.pause();
     if(activeSound){const previous=activeSound;activeSound=null;try{previous.stop();}catch(error){}}
@@ -68,7 +69,19 @@
   function distance(){return Math.max(1,cinema.offsetHeight-stage.offsetHeight);}
   function readScroll(){target=clamp((scrollY-cinema.offsetTop)/distance());}
   function resize(){if(renderer)renderer.resize(stage.clientWidth,stage.clientHeight,Math.min(devicePixelRatio||1,stage.clientWidth<=700?1.5:2));readScroll();schedule();}
-  function stopTour(){if(!playing)return;playing=false;play.setAttribute('aria-pressed','false');playLabel.textContent='Ver recorrido';play.firstElementChild.textContent='▷';}
+  function stopTour(){autoStartPending=false;if(!playing)return;playing=false;play.setAttribute('aria-pressed','false');playLabel.textContent='Ver recorrido';play.firstElementChild.textContent='▷';}
+  function startTour(){
+    autoStartPending=false;
+    stopSound();scrollTo({top:cinema.offsetTop,behavior:'instant'});current=target=0;
+    playedThisRun=false;startProgress=0;startTime=performance.now();playing=true;
+    play.setAttribute('aria-pressed','true');playLabel.textContent='Detener';play.firstElementChild.textContent='Ⅱ';schedule();
+  }
+  function maybeAutoStart(){
+    if(!autoStartPending||!visualReady||reduce.matches||document.hidden||!visible||paused||dialog.open)return;
+    readScroll();
+    if(target>.002){autoStartPending=false;return;}
+    startTour();
+  }
   function seek(progress){stopTour();scrollTo({top:cinema.offsetTop+clamp(progress)*distance(),behavior:paused||reduce.matches?'instant':'smooth'});readScroll();schedule();}
   function show(element,shown,inert=false){element.classList.toggle('is-visible',shown);element.setAttribute('aria-hidden',String(!shown));if(inert)element.inert=!shown;}
   function updateComparison(){
@@ -148,7 +161,7 @@
   addEventListener('wheel',stopTour,{passive:true});
   addEventListener('touchstart',event=>{if(!event.target.closest?.('#play-tour'))stopTour();},{passive:true});
   addEventListener('keydown',event=>{if(event.key===' '&&event.target.closest?.('#play-tour'))return;if(['ArrowDown','ArrowUp','PageDown','PageUp','Home','End',' '].includes(event.key))stopTour();});
-  document.addEventListener('visibilitychange',()=>{lastTime=0;if(document.hidden){if(frame)cancelAnimationFrame(frame);frame=0;stopTour();stopSound();}else schedule();});
+  document.addEventListener('visibilitychange',()=>{lastTime=0;if(document.hidden){if(frame)cancelAnimationFrame(frame);frame=0;stopTour();stopSound();}else{schedule();maybeAutoStart();}});
   document.addEventListener('pointerdown',unlockAudio,{capture:true});
   document.addEventListener('click',unlockAudio,{capture:true});
   document.addEventListener('touchend',unlockAudio,{capture:true,passive:true});
@@ -160,9 +173,7 @@
   modeButtons.forEach(button=>button.addEventListener('click',()=>{mode=button.dataset.mode;stage.dataset.mode=mode;modeButtons.forEach(item=>item.setAttribute('aria-pressed',String(item===button)));schedule();}));
   play.addEventListener('click',()=>{
     if(playing){stopTour();return;}
-    stopSound();scrollTo({top:cinema.offsetTop,behavior:'instant'});current=target=0;
-    playedThisRun=false;startProgress=0;startTime=performance.now();playing=true;
-    play.setAttribute('aria-pressed','true');playLabel.textContent='Detener';play.firstElementChild.textContent='Ⅱ';schedule();
+    startTour();
   });
   pause.addEventListener('click',()=>{paused=!paused;if(paused)stopTour();document.documentElement.classList.toggle('motion-paused',paused);pause.setAttribute('aria-pressed',String(paused));pause.setAttribute('aria-label',paused?'Activar efectos ambientales':'Pausar efectos ambientales');pause.title=pause.getAttribute('aria-label');pause.textContent=paused?'▷':'Ⅱ';schedule();});
   $('repeat-payment').addEventListener('click',()=>{stopSound();audio.currentTime=0;playedThisRun=false;seek(fromVisual(.66));});
@@ -224,11 +235,13 @@
   $('reset-example').addEventListener('click',()=>{
     comparison={...defaults};$('amount-input').value=String(defaults.amount);$('current-rate-input').value=String(defaults.currentRate);$('proposal-rate-input').value=String(defaults.proposalRate);invalidateAudio();$('audio-source').value='builtin';$('custom-audio-control').hidden=true;if(builtInAudioSource)audio.src=builtInAudioSource;else audio.removeAttribute('src');audio.load();playedThisRun=false;setAudioEnabled(true);updateComparison();
   });
-  if('IntersectionObserver' in window)new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible){lastTime=0;schedule();}else{stopTour();stopSound();}},{threshold:0}).observe(cinema);
+  if('IntersectionObserver' in window)new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible){lastTime=0;schedule();maybeAutoStart();}else{stopTour();stopSound();}},{threshold:0}).observe(cinema);
   const loadImage=url=>new Promise(resolve=>{const image=new Image();image.onload=image.onerror=()=>resolve(image);image.src=url;});
+  const autoStartFallback=setTimeout(()=>{visualReady=true;maybeAutoStart();},2500);
   Promise.all([loadImage('historia/assets/mercado-pago.png'),loadImage('historia/assets/point-smart-2-cutout.png')]).then(([logo,point])=>{
     try{if(typeof window.AcuerdoRenderer!=='function')throw new Error('Renderer unavailable');renderer=new window.AcuerdoRenderer(canvas,logo,point);resize();}
     catch(error){canvas.hidden=true;$('canvas-fallback').hidden=false;resize();}
+    visualReady=true;clearTimeout(autoStartFallback);maybeAutoStart();
   });
   text('example-source-context',example.sourceContext);
   document.querySelector('#audio-source option[value="builtin"]').textContent=audioConfig.label;
