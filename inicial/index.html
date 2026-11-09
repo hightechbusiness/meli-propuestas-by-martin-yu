@@ -9,14 +9,14 @@
   <meta name="theme-color" content="#ffe600">
   <meta name="description" content="Creá una propuesta comercial con tus condiciones y descargala en PDF. Versión inicial de acceso libre de Meli Propuestas, by Martin Yu.">
   <title>Meli Propuestas · Versión inicial</title>
-  <link rel="stylesheet" href="./demo.css?v=20261106-idiomas1">
+  <link rel="stylesheet" href="./demo.css?v=20261109-whatsapp1">
   <link rel="stylesheet" href="./onboarding.css?v=20261107-focus1">
   <link rel="stylesheet" href="./workspace-theme.css?v=20261107-continuidad1">
   <link rel="stylesheet" href="./continuidad.css?v=20261107-portada1">
   <script src="./pdf.js" defer></script>
   <script src="./presets.js?v=20261106-idiomas1" defer></script>
   <script src="./rates.js?v=20261106-idiomas1" defer></script>
-  <script src="./demo.js?v=20261107-continuidad1" defer></script>
+  <script src="./demo.js?v=20261109-whatsapp1" defer></script>
   <script src="./onboarding.js?v=20261107-continuidad1" defer></script>
 </head>
 <body>
@@ -107,7 +107,7 @@
           <div class="iva-control"><label class="method-toggle" for="includeIVA"><input id="includeIVA" type="checkbox" aria-describedby="includeIVAHelp" checked><span>Mostrar tasas con IVA 21%</span></label><p id="includeIVAHelp">Las tasas editables se cargan sin IVA. Al activarlo se suma el 21% una sola vez en la vista previa y el PDF.</p><span id="includeIVAError" class="field-error"></span></div>
           <div class="field"><label for="validUntil">Oferta válida hasta</label><input id="validUntil" type="date" aria-describedby="validUntilHelp" required><small id="validUntilHelp">Elegí la fecha límite de estas condiciones. Se muestra en la propuesta y en el PDF.</small><span id="validUntilError" class="field-error"></span></div>
           <div class="field"><label for="benefit">Condiciones de la propuesta <span class="optional">opcional</span></label><textarea id="benefit" rows="3" maxlength="110" placeholder="Vigencia y condiciones que quieras aclarar." aria-describedby="benefitHelp"></textarea><small id="benefitHelp">Indicá los alcances y hasta cuándo se mantiene la propuesta.</small><span id="benefitError" class="field-error"></span></div>
-          <button id="downloadButton" class="primary-button" type="submit" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4l4 4 4-4M4 16v4h16v-4"/></svg><span class="button-label">Crear propuesta PDF</span><span class="button-finish" aria-hidden="true">↗</span></button>
+          <div class="proposal-generate-actions"><button id="downloadButton" class="primary-button" type="submit" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4l4 4 4-4M4 16v4h16v-4"/></svg><span class="button-label">Crear propuesta PDF</span><span class="button-finish" aria-hidden="true">↗</span></button><button id="shareProposalButton" class="whatsapp-button" type="button" disabled><span aria-hidden="true">↗</span>Compartir propuesta por WhatsApp</button></div>
           <p id="formStatus" class="form-status" role="status" aria-live="polite"></p>
         </form>
       </div>
@@ -132,7 +132,7 @@
 
     <section id="downloadSuccess" class="success-panel" aria-labelledby="successTitle" hidden>
       <span class="success-icon" aria-hidden="true">✓</span><div><p class="eyebrow">TU PROPUESTA ESTÁ LISTA</p><h2 id="successTitle">Una buena idea, lista para compartir.</h2><p>Si trabajás con propuestas a diario, conocé las herramientas para equipos.</p></div><a class="secondary-button extended-link" href="../equipo/">Conocer el espacio del equipo <span aria-hidden="true">↗</span></a>
-    </section>
+    <button id="shareSuccessButton" class="whatsapp-button" type="button">Compartir propuesta por WhatsApp</button></section>
 
     <section id="alcance" class="capabilities" aria-labelledby="capabilitiesTitle"><div class="journey-heading"><p class="eyebrow">ELEGÍ CÓMO TRABAJAR</p><h2 id="capabilitiesTitle">Una propuesta útil desde el primer día.</h2><p>La versión inicial es de acceso libre. El espacio del equipo reúne funciones para el trabajo comercial diario.</p></div><div class="comparison-scroll" role="region" aria-label="Comparación de funciones" tabindex="0"><table class="comparison-table"><caption>Qué podés gestionar en cada espacio</caption><thead><tr><th scope="col">Herramienta</th><th scope="col">Versión inicial <span>Acceso libre</span></th><th scope="col">Espacio del equipo <span>Acceso verificado</span></th></tr></thead><tbody><tr><th scope="row">Comercio, asesor y condiciones</th><td><span class="available">Sí</span> · Los completás vos</td><td><span class="available">Sí</span> · Personalizables</td></tr><tr><th scope="row">Condiciones Mercado Pago</th><td>Cat. 1–5 · Provincia, acreditación, Point y QR</td><td>Maestro interno y ajustes propios</td></tr><tr><th scope="row">Carga de tasas y plazos</th><td>Condiciones de referencia o tu tabla propia; ajustes editables</td><td>Condiciones del maestro y personalización</td></tr><tr><th scope="row">IVA 21%</th><td>Se suma una sola vez al activarlo</td><td>Cálculo configurable de impuestos</td></tr><tr><th scope="row">Archivos y diseño</th><td>PDF · Un diseño unificado</td><td>PNG y PDF · Más diseños</td></tr><tr><th scope="row">Idiomas</th><td>Español o chino · Editor en español</td><td>Español o chino</td></tr><tr><th scope="row">Medios que muestra la propuesta</th><td>Débito, prepaga, crédito y tasa QR · Casillas para mostrar u ocultar</td><td>Opcionales en cada propuesta</td></tr><tr><th scope="row">Financiación en cuotas</th><td>PSJ a R5 · 2, 3, 6, 9, 12 y 18 cuotas, con visibilidad y adicionales editables</td><td>Más condiciones y comparaciones</td></tr><tr><th scope="row">Guardar propuestas en la app</th><td>Descargás tu PDF</td><td>Guardado local en el navegador</td></tr></tbody></table></div><p class="comparison-hint">En pantallas pequeñas, deslizá la tabla para ver ambos espacios.</p><p class="scope-note">Las condiciones de referencia permiten empezar con Cat. 1 a Cat. 5 y financiación hasta R5. También podés guardar tu tabla propia en este perfil de navegador. Si compartís el perfil, compartís ese guardado. El PDF incluye sólo los medios y las cuotas activados, en español o chino, con logo de Mercado Pago y fecha de validez. Para Cat. 6, R5+ y otras condiciones especiales, usá las herramientas del equipo. QR informa condiciones de cobro; no genera una imagen de código QR.</p></section>
 
@@ -142,6 +142,14 @@
   </main>
 
   <footer class="site-footer"><span>Meli Propuestas <b>·</b> by Martin Yu</span><a href="mailto:ext_maryu@mercadolibre.com?subject=Sugiero%20una%20mejora%20-%20Meli%20Propuestas">Sugerir una mejora</a></footer>
+  <dialog id="proposalShareDialog" class="proposal-share-dialog" aria-labelledby="proposalShareTitle" aria-describedby="proposalShareHelp">
+    <div class="proposal-share-heading"><div><p class="eyebrow">TU PROPUESTA, LISTA PARA ENVIAR</p><h2 id="proposalShareTitle">Compartir propuesta por WhatsApp</h2></div><button id="shareProposalClose" class="proposal-share-close" type="button" aria-label="Cerrar y volver a la propuesta">×</button></div>
+    <p id="proposalShareHelp">El PDF contiene las condiciones que elegiste. Revisá este mensaje antes de compartirlo con tu cliente.</p>
+    <label class="proposal-share-label" for="shareProposalMessage">Mensaje para tu cliente</label><textarea id="shareProposalMessage" rows="7" maxlength="2000" spellcheck="true"></textarea>
+    <p id="proposalShareStatus" class="proposal-share-status" role="status" aria-live="polite"></p>
+    <button id="shareNativePDF" class="whatsapp-button" type="button" disabled hidden>Compartir PDF y mensaje</button>
+    <div class="proposal-share-fallback"><p>También podés hacerlo en dos pasos. El enlace de WhatsApp lleva el mensaje; el PDF se adjunta manualmente.</p><div class="proposal-share-steps"><button id="shareDownloadPDF" class="secondary-button" type="button" disabled>1. Descargar PDF</button><a id="shareOpenWhatsApp" class="whatsapp-button" target="_blank" rel="noopener noreferrer" aria-disabled="true">2. Abrir WhatsApp con mensaje ↗</a></div><button id="shareCopyMessage" class="proposal-share-copy" type="button" disabled>Copiar mensaje</button></div>
+  </dialog>
   <dialog id="starterWelcome" class="starter-welcome" aria-labelledby="welcomeTitle" aria-describedby="welcomeDescription" data-paused="false">
     <div class="starter-welcome-bg" aria-hidden="true"><div class="starter-welcome-stream"><div class="starter-welcome-copy"><span>Creamos valor para nuestros usuarios</span><span>Emprendemos tomando riesgos</span><span>Ejecutamos con excelencia</span><span>Estamos en beta continuo</span><span>Competimos en equipo para ganar</span><span>Damos el máximo y nos divertimos</span></div><div class="starter-welcome-copy"><span>Creamos valor para nuestros usuarios</span><span>Emprendemos tomando riesgos</span><span>Ejecutamos con excelencia</span><span>Estamos en beta continuo</span><span>Competimos en equipo para ganar</span><span>Damos el máximo y nos divertimos</span></div></div></div>
     <div class="starter-welcome-layout"><section class="starter-welcome-card">

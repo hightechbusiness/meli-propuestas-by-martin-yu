@@ -146,7 +146,7 @@
     return TABLE.validate(table);
   }
   function options(select,rows,selected){select.replaceChildren(...rows.map(row=>{const option=element('option','',row.label);option.value=row.id;return option;}));select.value=rows.some(row=>row.id===selected)?selected:(rows[0]?.id||'');}
-  function edited(){ $('downloadSuccess').hidden=true;$('formStatus').textContent=''; }
+  function edited(){ closeProposalShare();$('downloadSuccess').hidden=true;$('formStatus').textContent=''; }
   function applyQR(){
     if($('sourceMode').value!=='presets')return;
     const choices=PRESETS.getQRChoices($('category').value,$('province').value),choice=choices.find(item=>item.id===$('qrCondition').value);
@@ -251,10 +251,48 @@
     ctx.fillStyle='#f8fafb';ctx.fillRect(0,footerY,width,height-footerY);text(ctx,copy.footer,margin,footerY+29,10,'#8b9eaa');text(ctx,validityLabel(data.validUntil,language),margin,footerY+46,10,'#8b9eaa');ctx.textAlign='right';text(ctx,'by Martin Yu',right,footerY+45,11,'#8fa3af');ctx.textAlign='left';return canvas;
   }
   function canvasBlob(canvas){return new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(Error('No se pudo preparar el archivo. Probá otra vez.')),'image/jpeg',0.95));}
-  async function download(data){
-    if(document.fonts?.ready)await document.fonts.ready;const logo=$('proposalLogo');if(typeof logo?.decode==='function')await logo.decode();const canvas=drawProposal(data),jpeg=new Uint8Array(await (await canvasBlob(canvas)).arrayBuffer()),bytes=root.PublicDemoPDF.imagePDF(jpeg,canvas.width,canvas.height),blob=new Blob([bytes],{type:'application/pdf'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=data.proposalLanguage==='zh-CN'?'propuesta-comercial-zh.pdf':'propuesta-comercial.pdf';link.hidden=true;document.body.append(link);try{link.click();}finally{link.remove();root.setTimeout(()=>URL.revokeObjectURL(url),30000);}return blob;
+  async function createPDF(data){
+    if(document.fonts?.ready)await document.fonts.ready;const logo=$('proposalLogo');if(typeof logo?.decode==='function')await logo.decode();const canvas=drawProposal(data),jpeg=new Uint8Array(await (await canvasBlob(canvas)).arrayBuffer()),bytes=root.PublicDemoPDF.imagePDF(jpeg,canvas.width,canvas.height);return new Blob([bytes],{type:'application/pdf'});
   }
-  let busy=false,buttonResetTimer=0;
+  const pdfName=data=>data.proposalLanguage==='zh-CN'?'propuesta-comercial-zh.pdf':'propuesta-comercial.pdf';
+  function savePDF(blob,data){const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=pdfName(data);link.hidden=true;document.body.append(link);try{link.click();}finally{link.remove();root.setTimeout(()=>URL.revokeObjectURL(url),30000);}}
+  async function download(data){const blob=await createPDF(data);savePDF(blob,data);return blob;}
+  let busy=false,buttonResetTimer=0,shareDraft=null,shareOrigin=null,shareRequest=0,nativeBusy=false;
+  function shareMessage(data){
+    if(data.proposalLanguage==='zh-CN')return ['您好'+(data.business?'，'+data.business:'')+'！','这是为您整理的 Mercado Pago 收款方案，请查看随附的 PDF。',validityLabel(data.validUntil,'zh-CN')+'。','如有疑问，欢迎随时联系我。'].join('\n\n');
+    return ['Hola'+(data.business?' '+data.business:'')+' 👋','Te comparto en PDF una propuesta de Mercado Pago pensada para tu negocio.',validityLabel(data.validUntil,'es')+'.','Si tenés alguna consulta, lo vemos juntos.'].join('\n\n');
+  }
+  function setShareActions(enabled){for(const id of ['shareNativePDF','shareDownloadPDF','shareCopyMessage'])$(id).disabled=!enabled||nativeBusy;$('shareOpenWhatsApp').setAttribute('aria-disabled',String(!enabled||nativeBusy));}
+  function invalidateShare(){shareRequest++;shareDraft=null;setShareActions(false);}
+  function closeProposalShare(){const dialog=$('proposalShareDialog');if(dialog?.open)dialog.close();else if(shareDraft)invalidateShare();}
+  function refreshShareLink(){$('shareOpenWhatsApp').href='https://wa.me/?text='+encodeURIComponent($('shareProposalMessage').value.trim());}
+  function currentShareDraft(){
+    const current=validate(read());if(!shareDraft||!current.valid||JSON.stringify(current.data)!==shareDraft.fingerprint){invalidateShare();$('proposalShareStatus').textContent='La propuesta cambió o venció. Cerrá este cuadro y volvé a prepararla para compartir.';return null;}return shareDraft;
+  }
+  function focusFirstError(errors){const first=[...FORM_FIELDS,...ITEM_FIELDS,...FIN_FIELDS].find(key=>errors[key]);$(first||(errors.financing?'installment-'+COUNTS[0]:'show-debit')).focus();}
+  async function prepareProposalShare(origin){
+    if(busy||nativeBusy)return;const result=preview();reportErrors(result.errors);
+    if(!result.valid){$('formStatus').dataset.error='true';$('formStatus').textContent='Revisá los campos señalados antes de compartir la propuesta.';focusFirstError(result.errors);return;}
+    invalidateShare();const request=shareRequest;shareOrigin=origin;nativeBusy=false;busy=true;
+    const dialog=$('proposalShareDialog');$('shareProposalMessage').value=shareMessage(result.data);$('shareProposalMessage').setAttribute('lang',result.data.proposalLanguage==='zh-CN'?'zh-CN':'es-AR');refreshShareLink();
+    $('shareNativePDF').hidden=true;$('proposalShareStatus').dataset.error='false';$('proposalShareStatus').textContent='Preparando el PDF de esta propuesta…';dialog.setAttribute('aria-busy','true');
+    if(typeof dialog.showModal==='function')dialog.showModal();else dialog.setAttribute('open','');
+    $('shareProposalClose').focus();
+    try{const blob=await createPDF(result.data);if(request!==shareRequest||!dialog.open)return;
+      const file=typeof root.File==='function'?new root.File([blob],pdfName(result.data),{type:'application/pdf'}):null;
+      shareDraft={blob,file,data:result.data,fingerprint:JSON.stringify(result.data)};
+      let native=false;try{native=!!file&&typeof root.navigator?.share==='function'&&root.navigator.canShare?.({files:[file]})===true;}catch(_){}
+      $('shareNativePDF').hidden=!native;setShareActions(true);$('proposalShareStatus').textContent=native?'PDF listo. Revisá el mensaje y elegí WhatsApp en el menú de tu dispositivo.':'PDF listo. Descargalo, abrí WhatsApp con tu mensaje y adjuntá el archivo.';$('shareProposalMessage').focus();
+    }catch(_){if(request===shareRequest){invalidateShare();$('proposalShareStatus').dataset.error='true';$('proposalShareStatus').textContent='No pudimos preparar el PDF. Cerrá este cuadro y probá otra vez.';}}
+    finally{busy=false;dialog.setAttribute('aria-busy','false');}
+  }
+  async function shareNativePDF(){
+    if(nativeBusy)return;const draft=currentShareDraft();if(!draft?.file)return;nativeBusy=true;setShareActions(true);
+    try{await root.navigator.share({files:[draft.file],title:draft.data.proposalLanguage==='zh-CN'?'Mercado Pago 收款方案':'Propuesta de Mercado Pago',text:$('shareProposalMessage').value.trim()});$('proposalShareStatus').textContent='Volviste del menú de compartir. Podés cerrar este cuadro o compartir de nuevo.';}
+    catch(error){$('proposalShareStatus').textContent=error?.name==='AbortError'?'Compartir cancelado. Tu PDF sigue listo.':'Tu dispositivo no pudo compartir el archivo. Podés descargar el PDF y adjuntarlo en WhatsApp.';}
+    finally{nativeBusy=false;setShareActions(!!shareDraft);}
+  }
+  async function copyShareMessage(){if(!currentShareDraft())return;try{if(typeof root.navigator?.clipboard?.writeText!=='function')throw Error('Clipboard unavailable');await root.navigator.clipboard.writeText($('shareProposalMessage').value);$('proposalShareStatus').textContent='Mensaje copiado. Podés pegarlo junto al PDF.';}catch(_){$('shareProposalMessage').focus();$('shareProposalMessage').select();$('proposalShareStatus').textContent='Seleccionamos el mensaje. Copialo desde el menú o con Ctrl+C.';}}
   function resetDownloadFeedback(){
     root.clearTimeout(buttonResetTimer);const button=$('downloadButton');button.classList.remove('is-generated');button.querySelector('.button-label').textContent='Crear propuesta PDF';button.querySelector('.button-finish').textContent='↗';
   }
@@ -279,7 +317,15 @@
       $('show-'+method).addEventListener('change',()=>{edited();reportErrors({});preview();});
       for(const field of ['rate','settlement']){const key=field+'-'+method;$(key).addEventListener('input',()=>{$('item-'+method).dataset.custom='true';edited();preview();if($(key).getAttribute('aria-invalid')==='true')reportErrors(validate(read()).errors);});}
     }
-    $('demoForm').addEventListener('submit',submit);preview();$('downloadButton').disabled=false;
+    $('demoForm').addEventListener('submit',submit);
+    for(const id of ['shareProposalButton','shareSuccessButton'])$(id).addEventListener('click',()=>prepareProposalShare($(id)));
+    $('shareNativePDF').addEventListener('click',shareNativePDF);
+    $('shareDownloadPDF').addEventListener('click',()=>{if(nativeBusy)return;const draft=currentShareDraft();if(!draft)return;savePDF(draft.blob,draft.data);$('proposalShareStatus').textContent='PDF descargado. Abrí WhatsApp y adjuntá este archivo al mensaje.';});
+    $('shareCopyMessage').addEventListener('click',copyShareMessage);$('shareProposalMessage').addEventListener('input',refreshShareLink);
+    $('shareOpenWhatsApp').addEventListener('click',event=>{if(nativeBusy||busy||!shareDraft){event.preventDefault();return;}if(!currentShareDraft()){event.preventDefault();return;}refreshShareLink();$('proposalShareStatus').textContent='Adjuntá el PDF en WhatsApp antes de enviar tu propuesta.';});
+    $('shareProposalClose').addEventListener('click',()=>closeProposalShare());
+    $('proposalShareDialog').addEventListener('close',()=>{invalidateShare();const origin=shareOrigin;shareOrigin=null;if(origin)origin.focus();});
+    preview();$('downloadButton').disabled=false;$('shareProposalButton').disabled=false;
   }
   root.PublicDemo=Object.freeze({parseRate,formatRate,validate,wrapText,displayRate,todayISO,validDate});init();
 })(window);
