@@ -95,4 +95,12 @@ Si la herramienta te ayuda, podés dejar una **estrella** en GitHub. Necesitás 
 
 [Sugerir una mejora por correo](mailto:ext_maryu@mercadolibre.com?subject=Sugiero%20una%20mejora%20-%20Meli%20Propuestas) · [Informar un problema](mailto:ext_maryu@mercadolibre.com?subject=Encontr%C3%A9%20un%20problema%20-%20Meli%20Propuestas)
 
+## Compartir la propuesta por WhatsApp
+
+Junto a Crear propuesta PDF está Compartir propuesta por WhatsApp. Prepara el PDF de las condiciones elegidas y un mensaje editable en español o chino, con vigencia y sin firma predeterminada. También aparece después de generar el archivo.
+
+En dispositivos compatibles se puede elegir WhatsApp en el menú para compartir el PDF y el texto. En PC está disponible Abrir WhatsApp con mensaje; se descarga el PDF y se adjunta en la conversación. El enlace lleva el mensaje, no un archivo ni el inicio de la herramienta. La persona elige el destinatario y revisa el envío.
+
+El PDF se prepara localmente y se vuelve a comprobar la propuesta antes de compartirla. Esta función no incorpora un contador central ni guarda nuevos datos del cliente o del asesor.
+
 <sub>Creado por Martin Yu.</sub>
