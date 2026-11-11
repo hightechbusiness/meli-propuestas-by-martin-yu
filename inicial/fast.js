@@ -75,10 +75,12 @@
     box(M, 46, 250, 108, 18, '#ffffff');
     if (info.logo && info.logo.complete && info.logo.naturalWidth) { const lw = 214, lh = lw * info.logo.naturalHeight / info.logo.naturalWidth; c.drawImage(info.logo, M + 18, 46 + (108 - lh) / 2, lw, lh); }
     else text('Mercado Pago', M + 125, 86, 28, NAVY, 800, 'center');
-    const maxW = W - M * 2 - 285, title = 'Tasas Mercado Pago';
-    text(title, M + 285, 50, fit(title, maxW, 46, 30, 800), INK, 800);
-    if (info.client) { const who = 'Propuesta para ' + info.client; text(who, M + 285, 106, fit(who, maxW, 34, 20, 800), INK, 800); text('Condiciones estándar', M + 285, 152, 18, '#3d4f5c', 600); }
-    else text('Condiciones estándar', M + 285, 112, 26, INK, 650);
+    // Encabezado que le habla al comercio: título, para quién y qué incluye.
+    const maxW = W - M * 2 - 285, title = 'Cobrá más fácil con Mercado Pago';
+    text(title, M + 285, 48, fit(title, maxW, 46, 28, 800), INK, 800);
+    const detail = ['Point', sh.qr ? 'QR' : null, sh.fin ? 'Cuotas' : null, info.validity ? 'Válida hasta el ' + info.validity.slice(0, 5) : null].filter(Boolean).join(' · ');
+    if (info.client) { const who = 'Para ' + info.client; text(who, M + 285, 104, fit(who, maxW, 34, 20, 800), INK, 800); text(detail, M + 285, 152, fit(detail, maxW, 18, 12, 600), '#3d4f5c', 600); }
+    else text(detail, M + 285, 114, fit(detail, maxW, 24, 14, 650), INK, 650);
     let y = 232;
     text('Costos de procesamiento', M, y, 34, INK, 800);
     text(sh.iva ? 'IVA 21% incluido' : 'Tasas sin IVA', W - M, y + 8, 20, NAVY, 700, 'right');
