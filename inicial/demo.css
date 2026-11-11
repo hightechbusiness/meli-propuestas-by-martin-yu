@@ -52,6 +52,8 @@
 .team-access-link:focus-visible{outline:3px solid #009ee3;outline-offset:2px}
 .team-access small{opacity:.75;font-size:12px}
 
+/* Tasa de lista tachada en el modo experto (al lado de la tasa propuesta). */
+.proposal-rate .rate-list-ref{margin-left:10px;font-size:.32em;font-weight:600;opacity:.6;vertical-align:middle}
 /* Modo Fast de la edición inicial: selector de modo y flyer con todas las tasas. */
 .mode-switch{display:flex;gap:8px;max-width:1180px;margin:24px auto 12px;padding:0 20px;flex-wrap:wrap}
 .mode-tab{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:10px 18px;border-radius:14px;border:1px solid #c9d8e2;background:#fff;color:#0a2540;font:inherit;font-weight:800;font-size:14px;cursor:pointer}
