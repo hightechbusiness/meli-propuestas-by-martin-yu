@@ -17,7 +17,8 @@
   <script src="./presets.js?v=20261106-idiomas1" defer></script>
   <script src="./rates.js?v=20261106-idiomas1" defer></script>
   <script src="./demo.js?v=20261109-whatsapp1" defer></script>
-  <script src="./onboarding.js?v=20261107-continuidad1" defer></script>
+  <script src="./fast.js?v=20261111-fast1" defer></script>
+<script src="./onboarding.js?v=20261107-continuidad1" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#generador">Ir al generador</a>
@@ -62,7 +63,9 @@
       </div>
     </details>
 
-    <section id="generador" class="workspace" aria-label="Crear tu propuesta">
+    <div class="mode-switch" role="tablist" aria-label="Elegí cómo trabajar"><button type="button" role="tab" class="mode-tab is-on" data-inicial-mode="fast" aria-selected="true">⚡ Modo Fast <small>Todas las tasas en un flyer</small></button><button type="button" role="tab" class="mode-tab" data-inicial-mode="expert" aria-selected="false">Modo experto <small>Propuesta a medida</small></button></div>
+    <section id="fastInicial" class="workspace fast-public" aria-label="Modo Fast"><div id="fastPublicRoot"></div></section>
+<section id="generador" class="workspace" aria-label="Crear tu propuesta">
       <div class="editor panel">
         <div class="panel-heading"><span class="step">01</span><div><h2>Dale tu toque</h2><p>Tu información, tus condiciones.</p></div><span class="local-pill">En tu navegador</span></div>
         <form id="demoForm" novalidate>
