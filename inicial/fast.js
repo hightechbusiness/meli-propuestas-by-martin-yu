@@ -27,16 +27,19 @@
     const tax = sel.iva === true ? 1.21 : 1, show = v => ok(v) ? r2(v * tax) : null;
     const rel = ['0', '1', '2', '3'].map(r => P.getPoint(cat, zone.rep, r));
     if (rel.some(x => !x)) throw new Error('No hay condiciones para esta zona y categoría.');
+    // Tasa de lista (Cat. 1, misma zona y plazo) tachada: sólo si se pide y si la propuesta es menor.
+    const refOn = sel.showRef !== false, base = ['0', '1', '2', '3'].map(r => P.getPoint('c1', zone.rep, r));
+    const row = (term, val, refVal) => ({ term, rate: show(val), ref: refOn && ok(val) && ok(refVal) && refVal > val + 1e-9 ? show(refVal) : null });
     const point = [
-      { method: 'debit', rows: [{ term: '0d', rate: show(rel[0].debit.rate) }, { term: '2d', rate: show(rel[1].debit.rate) }] },
-      { method: 'credit', rows: [{ term: '0d', rate: show(rel[0].credit.rate) }, { term: '5d', rate: show(rel[2].credit.rate) }, { term: '10d', rate: show(rel[3].credit.rate) }] },
-      { method: 'prepaid', rows: [{ term: '0d', rate: show(rel[0].prepaid.rate) }, { term: '3d', rate: show(rel[2].prepaid.rate) }] }
+      { method: 'debit', rows: [row('0d', rel[0].debit.rate, base[0].debit.rate), row('2d', rel[1].debit.rate, base[1].debit.rate)] },
+      { method: 'credit', rows: [row('0d', rel[0].credit.rate, base[0].credit.rate), row('5d', rel[2].credit.rate, base[2].credit.rate), row('10d', rel[3].credit.rate, base[3].credit.rate)] },
+      { method: 'prepaid', rows: [row('0d', rel[0].prepaid.rate, base[0].prepaid.rate), row('3d', rel[2].prepaid.rate, base[2].prepaid.rate)] }
     ];
     let qr = null;
     if (sel.qr !== false) {
-      const choices = P.getQRChoices(cat, zone.rep); qr = [];
+      const choices = P.getQRChoices(cat, zone.rep), baseQR = P.getQRChoices('c1', zone.rep); qr = [];
       for (const method of ['money', 'debit', 'credit', 'consumer']) {
-        const rows = choices.filter(ch => ch.id.startsWith(method + '-')).map(ch => ({ term: ch.id.split('-')[1], rate: show(ch.rate) }));
+        const rows = choices.filter(ch => ch.id.startsWith(method + '-')).map(ch => row(ch.id.split('-')[1], ch.rate, (baseQR.find(b => b.id === ch.id) || {}).rate));
         if (rows.length) qr.push({ method, rows });
       }
     }
@@ -48,7 +51,7 @@
 
   function messageText(sh, info) {
     const lines = [`Hola${info.client ? ' ' + info.client : ''}. Te comparto las tasas de Mercado Pago.`, ''];
-    const block = (title, groups) => { lines.push(title); for (const g of groups) lines.push(`• ${METHOD[g.method]}: ` + g.rows.map(r => `${termLabel(r.term).toLowerCase()} ${pctText(r.rate)}`).join(' · ')); lines.push(''); };
+    const block = (title, groups) => { lines.push(title); for (const g of groups) lines.push(`• ${METHOD[g.method]}: ` + g.rows.map(r => `${termLabel(r.term).toLowerCase()} ${pctText(r.rate)}${r.ref ? ` (antes ${pctText(r.ref)})` : ''}`).join(' · ')); lines.push(''); };
     block('POINT', sh.point);
     if (sh.qr) block('CÓDIGO QR', sh.qr);
     if (sh.fin) { lines.push('CUOTAS POINT'); lines.push(sh.fin.map(f => `${f.n}: ${pctText(f.rate)}`).join(' · ')); lines.push(''); }
@@ -70,6 +73,7 @@
     const text = (v, x, y, s, color = INK, w = 400, align = 'left') => { c.font = font(s, w); c.fillStyle = color; const width = c.measureText(v).width; c.fillText(v, align === 'right' ? x - width : align === 'center' ? x - width / 2 : x, y); return width; };
     const fit = (v, max, s, min, w) => { let z = s; c.font = font(z, w); while (z > min && c.measureText(v).width > max) { z--; c.font = font(z, w); } return z; };
     const box = (x, y, w, h, r, fill, stroke) => { c.beginPath(); if (c.roundRect) c.roundRect(x, y, w, h, r); else c.rect(x, y, w, h); if (fill) { c.fillStyle = fill; c.fill(); } if (stroke) { c.strokeStyle = stroke; c.lineWidth = 2; c.stroke(); } };
+    const strike = (v, xRight, y, s) => { const wv = text(v, xRight, y, s, '#8aa0ad', 500, 'right'); c.fillStyle = '#8aa0ad'; c.fillRect(xRight - wv, y + s * .55, wv, 1.6); return wv; };
     c.fillStyle = '#ffffff'; c.fillRect(0, 0, W, H);
     c.fillStyle = YELLOW; c.fillRect(0, 0, W, 200);
     box(M, 46, 250, 108, 18, '#ffffff');
@@ -91,7 +95,7 @@
       for (const g of groups) {
         const h = rowH * g.rows.length, label = METHOD[g.method];
         text(label, x + 22, at + h / 2 - 11, fit(label, w * .38, 19, 13, 700), INK, 700);
-        g.rows.forEach((r, i) => { const ry = at + i * rowH; text(termLabel(r.term), x + w * .44, ry + 15, 18, MUTED, 400); text(pctText(r.rate), x + w - 24, ry + 11, 24, INK, 800, 'right'); if (i < g.rows.length - 1) { c.fillStyle = LINE; c.fillRect(x + w * .42, ry + rowH - 1, w * .58 - 16, 1); } });
+        g.rows.forEach((r, i) => { const ry = at + i * rowH; text(termLabel(r.term), x + w * .44, ry + 15, 18, MUTED, 400); const rw = text(pctText(r.rate), x + w - 24, ry + 11, 24, INK, 800, 'right'); if (r.ref) strike(pctText(r.ref), x + w - 24 - rw - 12, ry + 16, 16); if (i < g.rows.length - 1) { c.fillStyle = LINE; c.fillRect(x + w * .42, ry + rowH - 1, w * .58 - 16, 1); } });
         at += h; c.fillStyle = LINE; c.fillRect(x + 12, at - 1, w - 24, 1.5);
       }
       box(x, top, w, at - top + 6, 18, null, LINE);
@@ -127,7 +131,7 @@
   // ---------- Interfaz ----------
   const KEY = 'meli-propuestas-inicial-fast-v1', MODE = 'meli-propuestas-inicial-modo-v1';
   const store = { get(k) { try { return localStorage.getItem(k); } catch (_) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (_) { /* opcional */ } } };
-  const defaults = { group: 'resto', cat: 'c3', round: 'r4', iva: false, qr: true, days: 7, iibbNote: false, clientOn: false, client: '', advOn: false, advName: '', advEmail: '', advPhone: '' };
+  const defaults = { group: 'resto', cat: 'c3', round: 'r4', iva: false, qr: true, showRef: true, days: 7, iibbNote: false, clientOn: false, client: '', advOn: false, advName: '', advEmail: '', advPhone: '' };
   function loadSel() { try { return { ...defaults, ...(JSON.parse(store.get(KEY) || '{}') || {}) }; } catch (_) { return { ...defaults }; } }
   const plusDays = n => { const d = new Date(); d.setDate(d.getDate() + n); return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`; };
   const esc = v => String(v).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch]);
@@ -154,6 +158,7 @@
             <div class="fast-toggles">
               <label><input type="checkbox" data-fast-toggle="qr"${sel.qr ? ' checked' : ''}> Mostrar QR</label>
               <label><input type="checkbox" data-fast-toggle="iva"${sel.iva ? ' checked' : ''}> + IVA 21%</label>
+              <label title="Muestra la tasa de lista (Cat. 1) tachada al lado, sólo si es más alta"><input type="checkbox" data-fast-toggle="showRef"${sel.showRef !== false ? ' checked' : ''}> Lista tachada</label>
             </div>
             <div class="fast-step"><span>4</span><strong>Vigencia</strong></div>
             ${chips('days', [5, 7, 10, 15].map(n => ({ v: n, l: n + ' días' })), sel.days)}

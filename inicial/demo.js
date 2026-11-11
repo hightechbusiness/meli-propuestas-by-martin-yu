@@ -64,7 +64,13 @@
       if(!settlement)errors['settlement-'+method]='Completá el plazo de acreditación.';
       else if(settlement.length>LIMITS.settlement)errors['settlement-'+method]='Usá hasta '+LIMITS.settlement+' caracteres.';
       if(method==='qr'&&data.sourceMode==='presets'&&!qr)errors.qrCondition='Elegí cómo paga el cliente con QR.';
-      data.items.push({method,rate,settlement,label:method==='qr'&&qr?'QR · '+qr.label:TABLE.METHODS[method]});
+      // Tasa de lista (Cat. 1 · misma provincia y plazo) para mostrarla tachada, sólo con condiciones de referencia y si es mayor.
+      let ref=null;
+      if(values.showRef===true&&data.sourceMode==='presets'&&rate!==null&&data.province){
+        const base=method==='qr'?PRESETS.getQRChoices('c1',data.province).find(item=>item.id===data.qrCondition)?.rate:PRESETS.getPoint('c1',data.province,data.release)?.[method]?.rate;
+        if(typeof base==='number'&&base>rate+1e-9)ref=base;
+      }
+      data.items.push({method,rate,settlement,ref,label:method==='qr'&&qr?'QR · '+qr.label:TABLE.METHODS[method]});
     }
     data.round=PRESETS.ROUNDS.some(item=>item.id===values.round)?values.round:'';
     if(data.showFinancing){
@@ -87,7 +93,7 @@
   }
   function read(){
     const values=Object.fromEntries(FORM_FIELDS.map(key=>[key,$(key).value]));
-    values.includeIVA=$('includeIVA').checked===true;values.showFinancing=$('showFinancing').checked===true;
+    values.includeIVA=$('includeIVA').checked===true;values.showFinancing=$('showFinancing').checked===true;values.showRef=$('showListRef')?$('showListRef').checked===true:false;
     values.installments=COUNTS.filter(count=>$('installment-'+count).checked===true);
     values.financingRates=Object.fromEntries(COUNTS.map(count=>[String(count),$('fin-rate-'+count).value]));
     values.items=Object.fromEntries(METHODS.map(method=>[method,{show:$('show-'+method).checked===true,rate:$('rate-'+method).value,settlement:$('settlement-'+method).value}]));return values;
@@ -125,6 +131,7 @@
       const top=element('div','rate-card-top');top.append(element('span','rate-card-method',itemLabel(item,data)),element('span','rate-spark','✦'));
       const rate=element('div','proposal-rate'),value=displayRate(item.rate,data.includeIVA);rate.append(document.createTextNode(value===null?'—':formatRate(value,language)),element('span','','%'));
       const term=element('p','settlement-preview');term.append(element('span','',item.settlement?copy.settlement+settlementLabel(item.settlement,language):copy.termMissing));
+      if(item.ref!==null&&item.ref!==undefined){const old=element('s','rate-list-ref',formatRate(displayRate(item.ref,data.includeIVA),language)+'%');rate.append(old);}
       card.append(top,rate,term);return card;
     });
     $('previewRates').replaceChildren(...cards);$('previewRates').dataset.count=String(cards.length);$('previewEmpty').hidden=cards.length>0||data.showFinancing;
@@ -236,6 +243,7 @@
       font(ctx,size,700);while(ctx.measureText(rate).width+38>cardWidth-inset*2&&size>35)font(ctx,--size,700);
       const rateWidth=ctx.measureText(rate).width,baseline=top+(count===1?151:116);
       text(ctx,rate,x+inset,baseline,size,navy,700);text(ctx,'%',x+inset+rateWidth+8,baseline-2,count===1?45:28,navy,700);
+      if(item.ref!==null&&item.ref!==undefined){const old=formatRate(displayRate(item.ref,data.includeIVA),language)+'%',oldSize=count===1?20:15;font(ctx,count===1?45:28,700);const pctW=ctx.measureText('%').width;font(ctx,oldSize,600);const ow=ctx.measureText(old).width,ox=Math.min(x+inset+rateWidth+8+pctW+14,x+cardWidth-inset-ow),oy=baseline-size*.55;text(ctx,old,ox,oy,oldSize,'#5f7a52',600);ctx.fillStyle='#5f7a52';ctx.fillRect(ox,oy-oldSize*.35,ow,1.6);}
       font(ctx,11);wrapText(ctx,copy.settlement+settlementLabel(item.settlement,language),cardWidth-inset*2,3).forEach((line,i)=>text(ctx,line,x+inset,top+(count===1?200:151)+i*16,11,'#426443'));
     });
     if(count)y+=rows*cardHeight+(rows-1)*gap+31;
@@ -311,7 +319,7 @@
     $('proposalLanguage').addEventListener('change',()=>{edited();reportErrors({});preview();});
     $('qrCondition').addEventListener('change',()=>{applyQR();edited();reportErrors({});preview();});
     $('round').addEventListener('change',()=>{applyRound();edited();reportErrors({});preview();});
-    for(const key of ['includeIVA','showFinancing',...COUNTS.map(count=>'installment-'+count)])$(key).addEventListener('change',()=>{edited();reportErrors({});preview();});
+    for(const key of ['includeIVA','showListRef','showFinancing',...COUNTS.map(count=>'installment-'+count)])$(key).addEventListener('change',()=>{edited();reportErrors({});preview();});
     for(const key of ['business','adviser','contact','benefit','validUntil',...FIN_FIELDS])$(key).addEventListener('input',()=>{edited();preview();if($(key).getAttribute('aria-invalid')==='true')reportErrors(validate(read()).errors);});
     for(const method of METHODS){
       $('show-'+method).addEventListener('change',()=>{edited();reportErrors({});preview();});
