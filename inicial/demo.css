@@ -44,3 +44,41 @@
 @media(max-width:600px){.proposal-generate-actions{grid-template-columns:minmax(0,1fr)}.proposal-generate-actions .whatsapp-button{min-height:48px}.success-panel>.whatsapp-button{width:100%}.proposal-share-dialog{padding:21px 18px}.proposal-share-heading h2{font-size:21px}.proposal-share-dialog textarea{font-size:16px}.proposal-share-steps{grid-template-columns:minmax(0,1fr)}.proposal-share-steps>a,.proposal-share-steps>button{width:100%;box-sizing:border-box}}
 @media(prefers-reduced-motion:reduce){.whatsapp-button{transition:none}}
 .whatsapp-button .wa-icon{width:18px;height:18px;flex:none;fill:currentColor;stroke:none;color:#e9fff6}.whatsapp-button{background:linear-gradient(135deg,#14946d,#0f7a5c);border-color:#0f7a5c}.whatsapp-button:hover{background:linear-gradient(135deg,#118660,#0c684e)}
+
+/* Acceso directo a la herramienta del equipo, siempre debajo de Crear propuesta. */
+.team-access{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:12px 0 0}
+.team-access-link{display:inline-flex;align-items:center;gap:6px;padding:9px 14px;border-radius:999px;border:1px solid currentColor;font-weight:700;font-size:13px;text-decoration:none}
+.team-access-link:hover{text-decoration:underline}
+.team-access-link:focus-visible{outline:3px solid #009ee3;outline-offset:2px}
+.team-access small{opacity:.75;font-size:12px}
+
+/* Modo Fast de la edición inicial: selector de modo y flyer con todas las tasas. */
+.mode-switch{display:flex;gap:8px;max-width:1180px;margin:24px auto 12px;padding:0 20px;flex-wrap:wrap}
+.mode-tab{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:10px 18px;border-radius:14px;border:1px solid #c9d8e2;background:#fff;color:#0a2540;font:inherit;font-weight:800;font-size:14px;cursor:pointer}
+.mode-tab small{font-weight:500;font-size:11px;opacity:.75}
+.mode-tab.is-on{background:#ffe600;border-color:#ffe600}
+.mode-tab:focus-visible{outline:3px solid #009ee3;outline-offset:2px}
+.fast-public[hidden],#generador[hidden]{display:none}
+.fast-public{max-width:1180px;margin:0 auto 40px;padding:0 20px}
+.fast-public .fast-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.9fr);gap:24px;align-items:start}
+.fast-public .fast-card{padding:24px;border-radius:20px;background:#fff;border:1px solid #dbe6ee;box-shadow:0 12px 30px #0a254012;color:#0a2540}
+.fast-public .fast-kicker{margin:0;color:#009ee3;font-size:11px;font-weight:800;letter-spacing:.14em}
+.fast-public .fast-title{margin:6px 0 4px;font-size:clamp(22px,2.4vw,32px);line-height:1.15}
+.fast-public .fast-lead{margin:0 0 12px;color:#5f7686;font-size:13px;line-height:1.6}
+.fast-public .fast-step{display:flex;align-items:center;gap:8px;margin:16px 0 8px;font-size:13px}
+.fast-public .fast-step span{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:999px;background:#ffe600;font-size:11px;font-weight:800}
+.fast-public .fast-chips{display:flex;flex-wrap:wrap;gap:6px}
+.fast-public .fast-chip{min-height:36px;padding:8px 13px;border:1px solid #c9d8e2;border-radius:12px;background:#f5f9fb;color:#0a2540;font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.fast-public .fast-chip.is-on{background:#0a2540;border-color:#0a2540;color:#fff}
+.fast-public .fast-chip:focus-visible{outline:3px solid #009ee3;outline-offset:2px}
+.fast-public .fast-hint{margin:6px 0 0;color:#5f7686;font-size:12px;line-height:1.5}
+.fast-public .fast-toggles,.fast-public .fast-optional{display:grid;gap:6px;margin:14px 0 4px;font-size:13px}
+.fast-public .fast-toggles{display:flex;flex-wrap:wrap;gap:6px 18px}
+.fast-public .fast-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:6px;margin:0 0 6px 22px}
+.fast-public .fast-fields[hidden]{display:none}
+.fast-public .fast-fields input{min-height:36px;padding:6px 10px;border:1px solid #c9d8e2;border-radius:10px;font:inherit}
+.fast-public .fast-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.fast-public .fast-status{min-height:18px;margin:8px 0 0;color:#b5401b;font-size:12px}
+.fast-public .fast-preview{position:sticky;top:90px}
+.fast-public .fast-preview canvas{display:block;width:100%;max-width:560px;height:auto;margin:0 auto;border-radius:12px;box-shadow:0 18px 40px #0a254030;background:#fff}
+@media (max-width:900px){.fast-public .fast-layout{grid-template-columns:1fr}.fast-public .fast-preview{position:static}}
