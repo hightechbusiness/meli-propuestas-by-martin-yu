@@ -44,3 +44,10 @@
 @media(max-width:600px){.proposal-generate-actions{grid-template-columns:minmax(0,1fr)}.proposal-generate-actions .whatsapp-button{min-height:48px}.success-panel>.whatsapp-button{width:100%}.proposal-share-dialog{padding:21px 18px}.proposal-share-heading h2{font-size:21px}.proposal-share-dialog textarea{font-size:16px}.proposal-share-steps{grid-template-columns:minmax(0,1fr)}.proposal-share-steps>a,.proposal-share-steps>button{width:100%;box-sizing:border-box}}
 @media(prefers-reduced-motion:reduce){.whatsapp-button{transition:none}}
 .whatsapp-button .wa-icon{width:18px;height:18px;flex:none;fill:currentColor;stroke:none;color:#e9fff6}.whatsapp-button{background:linear-gradient(135deg,#14946d,#0f7a5c);border-color:#0f7a5c}.whatsapp-button:hover{background:linear-gradient(135deg,#118660,#0c684e)}
+
+/* Acceso directo a la herramienta del equipo, siempre debajo de Crear propuesta. */
+.team-access{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:12px 0 0}
+.team-access-link{display:inline-flex;align-items:center;gap:6px;padding:9px 14px;border-radius:999px;border:1px solid currentColor;font-weight:700;font-size:13px;text-decoration:none}
+.team-access-link:hover{text-decoration:underline}
+.team-access-link:focus-visible{outline:3px solid #009ee3;outline-offset:2px}
+.team-access small{opacity:.75;font-size:12px}
