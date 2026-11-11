@@ -85,7 +85,11 @@
         if(!selected.includes(count))continue;
         const additional=parseRate(values.financingRates?.[String(count)]);
         if(additional===null)errors['fin-rate-'+count]='Completá el adicional de financiación, sin IVA.';
-        data.financing.push({count,additional,processing,total:additional===null||processing===null?null:processing+additional});
+        const total=additional===null||processing===null?null:processing+additional;
+        // Lista de cuotas: PSJ (round sin beneficio), sólo con tasas sugeridas y si la elegida es menor.
+        let ref=null;
+        if(values.showRef===true&&data.sourceMode==='presets'&&total!==null){const psj=(PRESETS.getFinancing('lt').find(f=>f.count===count)||{}).additional;if(typeof psj==='number'&&psj>additional+1e-9)ref=processing+psj;}
+        data.financing.push({count,additional,processing,total,ref});
       }
     }
     if(!data.items.length&&!data.financing.length)errors.items='Mostrá al menos un medio de cobro o una opción de cuotas.';
@@ -136,7 +140,7 @@
     });
     $('previewRates').replaceChildren(...cards);$('previewRates').dataset.count=String(cards.length);$('previewEmpty').hidden=cards.length>0||data.showFinancing;
     $('previewFinancing').hidden=!data.showFinancing;
-    const rows=data.financing.map(item=>{const row=element('article','installment-row');row.dataset.count=String(item.count);const value=displayRate(item.total,data.includeIVA);row.append(element('strong','',installmentLabel(item.count,language)),element('span','',value===null?'—':formatRate(value,language)+'%'),element('small','',copy.cost+(data.includeIVA?copy.withIVA:'')));return row;});
+    const rows=data.financing.map(item=>{const row=element('article','installment-row');row.dataset.count=String(item.count);const value=displayRate(item.total,data.includeIVA);const val=element('span','',value===null?'—':formatRate(value,language)+'%');if(item.ref!==null&&item.ref!==undefined)val.append(element('s','rate-list-ref',formatRate(displayRate(item.ref,data.includeIVA),language)+'%'));row.append(element('strong','',installmentLabel(item.count,language)),val,element('small','',copy.cost+(data.includeIVA?copy.withIVA:'')));return row;});
     $('previewInstallments').replaceChildren(...rows);return result;
   }
   let savedRateTable=TABLE.blank(),importNumber=0,legacyOriginal=null;
@@ -250,7 +254,7 @@
     if(data.financing.length){
       text(ctx,copy.financingPDF,margin,y+8,15,navy,700);text(ctx,copy.total+(data.includeIVA?' + IVA.':'.'),margin,y+29,11,muted);
       font(ctx,11);const termLines=wrapText(ctx,copy.settlement+settlementLabel(data.financingTerm,language),632,2);termLines.forEach((line,i)=>text(ctx,line,margin,y+48+i*15,11,muted));y+=65+(termLines.length-1)*15;
-      data.financing.forEach((item,index)=>{const x=margin+(index%2)*325,top=y+Math.floor(index/2)*85;rounded(ctx,x,top,307,72,12,'#edf7fb');text(ctx,installmentLabel(item.count,language),x+18,top+24,12,'#517589',700);text(ctx,formatRate(displayRate(item.total,data.includeIVA),language)+'%',x+18,top+55,27,navy,700);});
+      data.financing.forEach((item,index)=>{const x=margin+(index%2)*325,top=y+Math.floor(index/2)*85;rounded(ctx,x,top,307,72,12,'#edf7fb');text(ctx,installmentLabel(item.count,language),x+18,top+24,12,'#517589',700);const shown=formatRate(displayRate(item.total,data.includeIVA),language)+'%';text(ctx,shown,x+18,top+55,27,navy,700);if(item.ref!==null&&item.ref!==undefined){font(ctx,27,700);const sw=ctx.measureText(shown).width,old=formatRate(displayRate(item.ref,data.includeIVA),language)+'%';text(ctx,old,x+18+sw+12,top+52,14,'#8aa0ad');font(ctx,14);const ow=ctx.measureText(old).width;ctx.fillStyle='#8aa0ad';ctx.fillRect(x+18+sw+12,top+47,ow,1.4);}});
       y+=Math.ceil(data.financing.length/2)*85+15;
     }
     font(ctx,11);const taxLines=wrapText(ctx,taxLabel(data.includeIVA,language),632,2);taxLines.forEach((line,i)=>text(ctx,line,margin,y+10+i*16,11,'#64818e'));y+=taxLines.length*16+35;

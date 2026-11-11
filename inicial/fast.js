@@ -44,7 +44,9 @@
       }
     }
     const round = P.ROUNDS.some(r => r.id === sel.round) ? sel.round : 'none';
-    const fin = round === 'none' ? null : P.getFinancing(round).map(f => ({ n: f.count, rate: show(f.additional) }));
+    // Cuotas: la referencia de lista es PSJ, el round sin beneficio; se tacha sólo si el elegido es menor.
+    const psj = P.getFinancing('lt');
+    const fin = round === 'none' ? null : P.getFinancing(round).map((f, i) => { const rv = (psj[i] || {}).additional; return { n: f.count, rate: show(f.additional), ref: refOn && ok(f.additional) && ok(rv) && rv > f.additional + 1e-9 ? show(rv) : null }; });
     return { group: zone.group, long: false, eco: false, cat, round, iva: sel.iva === true, point, qr, fin, link: null, tci: null,
       catLabel: (P.CATEGORIES.find(c => c.id === cat) || {}).label || '', roundLabel: round === 'none' ? 'Sin cuotas' : (P.ROUNDS.find(r => r.id === round) || {}).label || round };
   }
@@ -54,7 +56,7 @@
     const block = (title, groups) => { lines.push(title); for (const g of groups) lines.push(`• ${METHOD[g.method]}: ` + g.rows.map(r => `${termLabel(r.term).toLowerCase()} ${pctText(r.rate)}${r.ref ? ` (antes ${pctText(r.ref)})` : ''}`).join(' · ')); lines.push(''); };
     block('POINT', sh.point);
     if (sh.qr) block('CÓDIGO QR', sh.qr);
-    if (sh.fin) { lines.push('CUOTAS POINT'); lines.push(sh.fin.map(f => `${f.n}: ${pctText(f.rate)}`).join(' · ')); lines.push(''); }
+    if (sh.fin) { lines.push('CUOTAS POINT'); lines.push(sh.fin.map(f => `${f.n}: ${pctText(f.rate)}${f.ref ? ` (antes ${pctText(f.ref)})` : ''}`).join(' · ')); lines.push(''); }
     lines.push(`Tasas ${sh.iva ? 'con IVA 21% incluido' : 'sin IVA'}.${info.iibbNote ? ' No incluye IIBB ni retenciones.' : ''} Los días son corridos.`);
     if (info.validity) lines.push(`Válida hasta ${info.validity}. Sujeta a condiciones comerciales.`);
     const contact = [info.advisor, info.advisorEmail, info.advisorPhone].filter(Boolean).join(' · ');
@@ -104,7 +106,7 @@
     const finList = (x, top, w) => {
       box(x, top, w, 64, 18, '#eef3f6'); text('CUOTAS POINT', x + 26, top + 18, 22, INK, 800);
       let at = top + 64; const rh = 50;
-      sh.fin.forEach((f, i) => { const ry = at + i * rh; text(`${f.n} cuotas`, x + 22, ry + 14, 19, INK, 600); text(pctText(f.rate), x + w - 24, ry + 11, 24, INK, 800, 'right'); if (i < sh.fin.length - 1) { c.fillStyle = LINE; c.fillRect(x + 12, ry + rh - 1, w - 24, 1); } });
+      sh.fin.forEach((f, i) => { const ry = at + i * rh; text(`${f.n} cuotas`, x + 22, ry + 14, 19, INK, 600); const rw = text(pctText(f.rate), x + w - 24, ry + 11, 24, INK, 800, 'right'); if (f.ref) strike(pctText(f.ref), x + w - 24 - rw - 12, ry + 16, 16); if (i < sh.fin.length - 1) { c.fillStyle = LINE; c.fillRect(x + 12, ry + rh - 1, w - 24, 1); } });
       at += rh * sh.fin.length; box(x, top, w, at - top + 6, 18, null, LINE); return at + 6;
     };
     const colW = (W - M * 2 - 30) / 2;
@@ -116,7 +118,7 @@
     if (sh.fin && sh.qr) {
       text('Costos de financiación Point', M, y, 28, INK, 800); text('Tasa directa adicional al procesamiento', W - M, y + 8, 17, MUTED, 400, 'right'); y += 48;
       const cw = (W - M * 2 - 40) / 3, ch = 78;
-      sh.fin.forEach((f, i) => { const x = M + (i % 3) * (cw + 20), yy = y + Math.floor(i / 3) * (ch + 14); box(x, yy, cw, ch, 16, '#f4f8fa', LINE); text(`${f.n} cuotas`, x + 22, yy + 26, 20, MUTED, 600); text(pctText(f.rate), x + cw - 22, yy + 20, 30, INK, 800, 'right'); });
+      sh.fin.forEach((f, i) => { const x = M + (i % 3) * (cw + 20), yy = y + Math.floor(i / 3) * (ch + 14); box(x, yy, cw, ch, 16, '#f4f8fa', LINE); text(`${f.n} cuotas`, x + 22, yy + 26, 20, MUTED, 600); const rw = text(pctText(f.rate), x + cw - 22, yy + 20, 30, INK, 800, 'right'); if (f.ref) strike(pctText(f.ref), x + cw - 22 - rw - 10, yy + 28, 16); });
       y += ch * 2 + 14 + 34;
     }
     const fy = H - 150; c.fillStyle = NAVY; c.fillRect(0, fy, W, 150); c.fillStyle = YELLOW; c.fillRect(0, fy, W, 6);
