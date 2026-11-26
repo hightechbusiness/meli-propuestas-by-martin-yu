@@ -4,7 +4,9 @@
   const KEY='meli-propuestas-local-rates-v1',MAX_BYTES=32768;
   const CATEGORIES=Object.freeze(['c1','c2','c3','c4','c5','c6']);
   const METHODS=Object.freeze({debit:'Débito',prepaid:'Tarjeta prepaga',credit:'Crédito en un pago',qr:'QR'});
-  const ROUNDS=Object.freeze(['lt','r1','r2','r3','r4','r5']);
+  const ROUNDS=Object.freeze(['r3n','r5']);
+  // Tablas guardadas antes del 26/11/2026 (PSJ, R1–R5): se conserva R5; los rounds dados de baja se descartan.
+  const LEGACY_ROUNDS=Object.freeze(['lt','r1','r2','r3','r4','r5']);
   const INSTALLMENTS=Object.freeze([2,3,6,9,12,18]);
   const LEGACY_METHODS=Object.freeze(['debit','credit','prepaid']);
   const LEGACY_SCOPES=Object.freeze(['','base','iva','total']);
@@ -45,8 +47,9 @@
       if(count&&input.taxScope==='')throw Error('El respaldo anterior no indica qué impuestos incluyen sus tasas.');
       if(count&&input.taxScope==='total')throw reviewError();
     }else{
-      if(!keys(input.financing,ROUNDS))throw Error('La tabla debe contener los seis rounds de financiación.');
+      if(!keys(input.financing,ROUNDS)&&!keys(input.financing,LEGACY_ROUNDS))throw Error('La tabla debe contener los rounds de financiación vigentes.');
       for(const round of ROUNDS){
+        if(!Object.hasOwn(input.financing,round))continue;
         if(!keys(input.financing[round],INSTALLMENTS.map(String)))throw Error('Cada round debe contener las seis opciones de cuotas.');
         for(const installment of INSTALLMENTS){
           const value=input.financing[round][String(installment)];
