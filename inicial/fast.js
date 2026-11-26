@@ -133,7 +133,7 @@
   // ---------- Interfaz ----------
   const KEY = 'meli-propuestas-inicial-fast-v1', MODE = 'meli-propuestas-inicial-modo-v1';
   const store = { get(k) { try { return localStorage.getItem(k); } catch (_) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (_) { /* opcional */ } } };
-  const defaults = { group: 'resto', cat: 'c3', round: 'r5', iva: false, qr: true, showRef: true, days: 7, iibbNote: false, clientOn: false, client: '', advOn: false, advName: '', advEmail: '', advPhone: '' };
+  const defaults = { group: 'resto', cat: 'c3', round: 'r3n', iva: false, qr: true, showRef: true, days: 7, iibbNote: false, clientOn: false, client: '', advOn: false, advName: '', advEmail: '', advPhone: '' };
   function loadSel() { let s; try { s = { ...defaults, ...(JSON.parse(store.get(KEY) || '{}') || {}) }; } catch (_) { s = { ...defaults }; } if (['lt', 'r1', 'r2', 'r3', 'r4'].includes(s.round)) s.round = 'r3n'; return s; } // R1–R4 dados de baja el 26/11/2026
   const plusDays = n => { const d = new Date(); d.setDate(d.getDate() + n); return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`; };
   const esc = v => String(v).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch]);
